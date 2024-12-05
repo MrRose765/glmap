@@ -9,14 +9,13 @@ setup(
     author='Youness Hourri',
     author_email='hourri@yahoo.com',
     url='https://github.com/uhourri/ghmap',
-    packages=find_packages(where='src'),  # Ensure it finds the src folder
-    package_dir={'': 'src'},  # Tell setuptools that your package is in the 'src' directory
+    packages=find_packages(), 
     install_requires=[
         'argparse',  # argparse is needed, as it's not part of the Python standard library in some versions
     ],
     entry_points={  # CLI command configuration
         'console_scripts': [
-            'ghmap=src.cli:main',  # Make sure this correctly points to src.cli
+            'ghmap=src.cli:main',  # Define the command and the main function
         ],
     },
     classifiers=[
