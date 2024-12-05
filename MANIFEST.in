@@ -1,3 +1,6 @@
-include LICENSE
 include README.md
-recursive-include config *.json
+include LICENSE
+include requirements.txt
+recursive-include src *
+recursive-include config *
+recursive-include data *
