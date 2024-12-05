@@ -1,0 +1,14 @@
+# Virtual environment
+.venv/
+
+# Byte-compiled files
+__pycache__/
+*.pyc
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+
+# MacOS files
+*.DS_Store
