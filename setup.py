@@ -11,14 +11,11 @@ setup(
     url='https://github.com/uhourri/ghmap',
     packages=find_packages(), 
     install_requires=[
-        'argparse',  
-        'os', 
-        'shutil',  
-        'json', 
+        'argparse',  # argparse is needed, as it's not part of the Python standard library in some versions
     ],
     entry_points={  # CLI command configuration
         'console_scripts': [
-            'ghmap=src.cli:main', 
+            'ghmap=src.cli:main',  # Define the command and the main function
         ],
     },
     classifiers=[
