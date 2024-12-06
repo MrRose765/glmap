@@ -24,11 +24,15 @@ class EventProcessor:
         self.pending_events = []    # Store end-of-file events for cross-file checks
 
     @staticmethod
-    def _parse_time(timestamp: int) -> datetime:
+    def _parse_time(timestamp: str | int) -> datetime:
         """
-        Converts Unix timestamp (in milliseconds) to a datetime object.
+        Converts a Unix timestamp (in milliseconds) or an ISO 8601 string to a datetime object.
         """
-        return datetime.fromtimestamp(timestamp / 1000)
+        if isinstance(timestamp, str):
+            return datetime.strptime(timestamp, '%Y-%m-%dT%H:%M:%SZ')
+        
+        elif isinstance(timestamp, int):
+            return datetime.utcfromtimestamp(timestamp / 1000)
 
     @staticmethod
     def _calculate_time_diff(start: datetime, end: datetime) -> float:

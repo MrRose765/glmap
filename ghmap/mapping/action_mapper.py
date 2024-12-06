@@ -21,15 +21,24 @@ class ActionMapper:
         """
         Deserializes the 'payload' field of the event record if it's a string.
         """
-        event_record['payload'] = json.loads(event_record['payload'])
+        if isinstance(event_record['payload'], str):
+            event_record['payload'] = json.loads(event_record['payload'])
+
         return event_record
 
     @staticmethod
     def _convert_date_to_iso(event_record: Dict) -> Dict:
         """
-        Converts 'created_at' field from Unix timestamp to ISO 8601 format.
+        Converts 'created_at' field from Unix timestamp (milliseconds) or ISO 8601 string to ISO 8601 format.
         """
-        event_record['created_at'] = datetime.fromtimestamp(event_record['created_at'] / 1000, tz=timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
+        created_at = event_record.get('created_at')
+
+        if isinstance(created_at, str):
+            event_record['created_at'] = datetime.strptime(created_at, '%Y-%m-%dT%H:%M:%SZ').strftime('%Y-%m-%dT%H:%M:%SZ')
+
+        elif isinstance(created_at, int):
+            event_record['created_at'] = datetime.utcfromtimestamp(created_at / 1000).strftime('%Y-%m-%dT%H:%M:%SZ')
+
         return event_record
 
     @staticmethod
