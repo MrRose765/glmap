@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools >= 61.0"]
+requires = ["setuptools >= 61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -33,6 +33,5 @@ include = ["ghmap"]
 [tool.setuptools.package-data]
 ghmap = ["action_to_activity.json", "event_to_action.json"]
 
-dependencies = [
-    "tqdm"
-]
+[project.dependencies]
+tqdm = "*"
