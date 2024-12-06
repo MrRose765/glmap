@@ -25,7 +25,7 @@ classifiers = [
 ]
 
 [project.scripts]
-ghamap = "src.cli:main"
+ghamap = "ghamap.cli:main"
 
 [tool.setuptools]
-packages = ["src"]
+packages = ["ghamap"]
