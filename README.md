@@ -52,7 +52,7 @@ Activate the virtual environment. Depending on your operating system, use one of
 source .venv/bin/activate
 ```
 
-- On macOS/Linux:
+- On Windows:
 ```bash
 .\.venv\Scripts\activate
 ```
@@ -78,12 +78,9 @@ Arguments:
 - --output-activities: The path to save the grouped activities (JSONL format).
 - --orgs-to-remove: A list of GitHub organizations to exclude from the raw events.
 
-## Mapping
+## Mapping Process
 
-### 1. Preprocessing GitHub Events
-Clean and prepare raw GitHub event data for mapping using the `ghmap/preprocess/event_processor.py` script.
-
-### 2. Mapping GitHub Events to Actions
+### 1. Mapping GitHub Events to Actions
 Use the schema defined in `ghmap/config/event_to_action.json` to transform raw GitHub events into granular actions. The process is demonstrated in the `ghmap/mapping/action_mapper.py`.
 
 The **Event-to-Action Mapping** is the first step in transforming raw GitHub events into structured and standardized actions. This process establishes a one-to-one correspondence between GitHub event types and meaningful actions that represent specific contributor operations. The mapping leverages the metadata in each event’s payload to determine the action type and extract relevant details. with this mapping process :
@@ -311,7 +308,7 @@ The raw event is transformed into a structured action. Common fields (e.g., even
    }
 }
 ```
-### 3. Mapping Actions to Activities
+### 2. Mapping Actions to Activities
 
 Use the schema defined in `ghmap/config/action_to_activity.json` to aggregate granular actions into high-level activities. This process is demonstrated in the `ghmap/mapping/activity_mapper.py`.
 
