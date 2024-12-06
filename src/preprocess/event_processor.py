@@ -75,12 +75,12 @@ class EventProcessor:
         """Filters out events belonging to unwanted organizations."""
         return [event for event in events if event.get('org', {}).get('login') not in self.orgs_to_remove]
 
-    def process_all_files(self):
+    def process(self):
         """Processes each file in the input folder and writes processed events to separate output files."""
         os.makedirs(self.output_folder, exist_ok=True)  # Ensure output folder exists
 
         for filename in sorted(os.listdir(self.input_folder)):
-            if filename.startswith('gh_events') and filename.endswith('.json'):
+            if filename.endswith('.json'):
                 with open(os.path.join(self.input_folder, filename), 'r') as f:
                     events = json.load(f)
 
@@ -94,4 +94,3 @@ class EventProcessor:
                 output_path = os.path.join(self.output_folder, filename)
                 with open(output_path, 'w') as out_file:
                     json.dump(events, out_file, indent=2)
-                print(f"Processed events saved to {output_path}")

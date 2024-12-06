@@ -24,11 +24,9 @@ def main():
             # Step 0: Event Preprocessing
             print("Step 0: Preprocessing events...")
             processor = EventProcessor(args.orgs_to_remove, args.raw_events, processed_folder)
-            processor.process_all_files()
-            print(f"Step 0 completed. Processed events saved in: {processed_folder}")
+            processor.process()
 
             # Step 1: Event to Action Mapping
-            print("Step 1: Mapping events to actions...")
             action_mapping = load_json_file(event_to_action_mapping_file)
             action_mapper = ActionMapper(action_mapping)
 
@@ -38,14 +36,13 @@ def main():
             all_mapped_actions = []
             for event_file in processed_event_files:
                 event_records = load_json_file(event_file)
-                mapped_actions = [action_mapper.map_event_to_action(event) for event in event_records]
+                mapped_actions = [action_mapper.map(event) for event in event_records]
                 all_mapped_actions.extend(mapped_actions)
 
             save_to_jsonl_file(all_mapped_actions, args.output_actions)
             print(f"Step 1 completed. Actions saved to: {args.output_actions}")
 
             # Step 2: Actions to Activities
-            print("Step 2: Mapping actions to activities...")
             actions = load_jsonl_file(args.output_actions)
             activity_mapping = load_json_file(action_to_activity_mapping_file)
             activity_mapper = ActivityMapper(actions, activity_mapping)

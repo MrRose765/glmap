@@ -30,7 +30,7 @@ class ActionMapper:
         
         return event_value == mapping_value
 
-    def map_event_to_action(self, event_record):
+    def map(self, event_record):
         """Maps an event to a high-level action based on event type and attributes."""
         event_record = self.deserialize_payload(event_record)
         event_record = self.convert_date_to_iso(event_record)
