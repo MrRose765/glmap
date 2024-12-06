@@ -2,10 +2,10 @@ import argparse
 import os
 import tempfile
 from importlib.resources import files
-from .preprocess.event_processor import EventProcessor
-from .mapping.action_mapper import ActionMapper
-from .mapping.activity_mapper import ActivityMapper
-from .utils import load_json_file, save_to_jsonl_file, load_jsonl_file
+from ghmap.preprocess.event_processor import EventProcessor
+from ghmap.mapping.action_mapper import ActionMapper
+from ghmap.mapping.activity_mapper import ActivityMapper
+from ghmap.utils import load_json_file, save_to_jsonl_file, load_jsonl_file
 
 
 def main():

@@ -2,6 +2,7 @@ import json
 import os
 from datetime import datetime, timedelta
 from typing import List, Dict
+from tqdm import tqdm
 
 class EventProcessor:
     """
@@ -109,7 +110,8 @@ class EventProcessor:
         """
         all_processed_events = []  # List to store all processed events
 
-        for filename in sorted(os.listdir(self.input_folder)):
+        # Loop over files and add a progress bar
+        for filename in tqdm(sorted(os.listdir(self.input_folder)), desc="Processing event files"):
             if filename.endswith('.json'):
                 with open(os.path.join(self.input_folder, filename), 'r') as f:
                     events = json.load(f)

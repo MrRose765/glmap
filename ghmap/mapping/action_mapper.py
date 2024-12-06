@@ -2,6 +2,7 @@ import json
 import re
 from datetime import datetime, timezone
 from typing import List, Dict, Any
+from tqdm import tqdm
 
 
 class ActionMapper:
@@ -109,7 +110,8 @@ class ActionMapper:
         """
         all_mapped_actions = []
 
-        for event_record in events:
+        # Add progress bar for processing each event
+        for event_record in tqdm(events, desc="Mapping events to actions", unit="event"):
             event_record = self._deserialize_payload(event_record)
             event_record = self._convert_date_to_iso(event_record)
             event_type = event_record.get('type')
