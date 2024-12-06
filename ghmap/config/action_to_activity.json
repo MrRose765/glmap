@@ -157,7 +157,7 @@
         ]
       },
       {
-        "name": "CommentCommit",
+        "name": "CommentCommits",
         "time_window": "300s",
         "actions": [
           {
