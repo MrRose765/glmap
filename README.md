@@ -81,7 +81,7 @@ Arguments:
 ## Mapping Process
 
 ### 1. Mapping GitHub Events to Actions
-Use the schema defined in `ghmap/config/event_to_action.json` to transform raw GitHub events into granular actions. The process is demonstrated in the `ghmap/mapping/action_mapper.py`.
+Use the schema defined in `ghmap/config/event_to_action.json` to transform raw GitHub events into granular actions. The process is demonstrated in the `ghmap/mapping/action_mapper.py` script.
 
 The **Event-to-Action Mapping** is the first step in transforming raw GitHub events into structured and standardized actions. This process establishes a one-to-one correspondence between GitHub event types and meaningful actions that represent specific contributor operations. The mapping leverages the metadata in each event’s payload to determine the action type and extract relevant details. with this mapping process :
 
@@ -310,7 +310,7 @@ The raw event is transformed into a structured action. Common fields (e.g., even
 ```
 ### 2. Mapping Actions to Activities
 
-Use the schema defined in `ghmap/config/action_to_activity.json` to aggregate granular actions into high-level activities. This process is demonstrated in the `ghmap/mapping/activity_mapper.py`.
+Use the schema defined in `ghmap/config/action_to_activity.json` to aggregate granular actions into high-level activities. This process is demonstrated in the `ghmap/mapping/activity_mapper.py` script.
 
 The **Action-to-Activity Mapping** is the second step in structuring GitHub contributor data. It builds on the Event-to-Action Mapping by grouping related actions into cohesive representations of high-level contributor tasks. Activities encapsulate the broader intent behind individual operations, making them valuable for understanding collaboration and task workflows. with the following mapping precess
 
