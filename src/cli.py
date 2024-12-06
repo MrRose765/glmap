@@ -12,6 +12,7 @@ def main():
     parser.add_argument('--raw-events', required=True, help="Path to the folder containing raw events.")
     parser.add_argument('--output-actions', required=True, help="Path to the output file for mapped actions.")
     parser.add_argument('--output-activities', required=True, help="Path to the output file for mapped activities.")
+    parser.add_argument('--orgs-to-remove', nargs='*', default=[], help="List of organizations to remove from the raw events.")
     args = parser.parse_args()
 
     # Use tempfile to create a temporary directory for processed events
@@ -22,8 +23,7 @@ def main():
         try:
             # Step 0: Event Preprocessing
             print("Step 0: Preprocessing events...")
-            orgs_to_remove = ["conda-forge", "Bioconductor", "openjournals"]
-            processor = EventProcessor(orgs_to_remove, args.raw_events, processed_folder)
+            processor = EventProcessor(args.orgs_to_remove, args.raw_events, processed_folder)
             processor.process_all_files()
             print(f"Step 0 completed. Processed events saved in: {processed_folder}")
 
@@ -56,6 +56,8 @@ def main():
 
         except Exception as e:
             print(f"An error occurred: {e}")
+
+        # No need for manual cleanup, tempfile will handle it
 
 if __name__ == '__main__':
     main()
