@@ -3,7 +3,7 @@ requires = ["setuptools >= 61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "ghamap"
+name = "ghmap"
 version = "1.0.0"
 license = { text = "MIT License" }
 authors = [{ name = "Youness Hourri", email = "youness.hourri@umons.ac.be" }]
@@ -25,11 +25,11 @@ classifiers = [
 ]
 
 [project.scripts]
-ghamap = "ghamap.cli:main"
+ghmap = "ghmap.cli:main"
 
 [tool.setuptools.packages.find]
-include = ["ghamap"]
+include = ["ghmap"]
 
 [tool.setuptools.package-data]
-ghamap = ["action_to_activity.json", "event_to_action.json"]
+ghmap = ["action_to_activity.json", "event_to_action.json"]
 
