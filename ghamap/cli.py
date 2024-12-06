@@ -18,8 +18,8 @@ def main():
 
     # Use tempfile to create a temporary directory for processed events
     with tempfile.TemporaryDirectory() as processed_folder:
-        event_to_action_mapping_file = files("ghamap").joinpath("event_to_action.json")
-        action_to_activity_mapping_file = files("ghamap").joinpath("action_to_activity.json")
+        event_to_action_mapping_file = files("ghamap").joinpath("config", "event_to_action.json")
+        action_to_activity_mapping_file = files("ghamap").joinpath("config", "action_to_activity.json")
 
         try:
             # Step 0: Event Preprocessing
