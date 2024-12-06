@@ -2,10 +2,10 @@ import argparse
 import os
 import tempfile
 from importlib.resources import files
-from ghmap.preprocess.event_processor import EventProcessor
-from ghmap.mapping.action_mapper import ActionMapper
-from ghmap.mapping.activity_mapper import ActivityMapper
-from ghmap.utils import load_json_file, save_to_jsonl_file, load_jsonl_file
+from .preprocess.event_processor import EventProcessor
+from .mapping.action_mapper import ActionMapper
+from .mapping.activity_mapper import ActivityMapper
+from .utils import load_json_file, save_to_jsonl_file, load_jsonl_file
 
 
 def main():
@@ -25,30 +25,23 @@ def main():
             # Step 0: Event Preprocessing
             print("Step 0: Preprocessing events...")
             processor = EventProcessor(args.orgs_to_remove, args.raw_events, processed_folder)
-            processor.process()
+            events = processor.process()  # Returns processed events
 
             # Step 1: Event to Action Mapping
             action_mapping = load_json_file(event_to_action_mapping_file)
             action_mapper = ActionMapper(action_mapping)
 
-            processed_event_files = sorted(
-                [os.path.join(processed_folder, f) for f in os.listdir(processed_folder) if f.endswith('.json')]
-            )
-            all_mapped_actions = []
-            for event_file in processed_event_files:
-                event_records = load_json_file(event_file)
-                mapped_actions = [action_mapper.map(event) for event in event_records]
-                all_mapped_actions.extend(mapped_actions)
+            actions = action_mapper.map(events)
 
-            save_to_jsonl_file(all_mapped_actions, args.output_actions)
+            save_to_jsonl_file(actions, args.output_actions)
             print(f"Step 1 completed. Actions saved to: {args.output_actions}")
 
             # Step 2: Actions to Activities
-            actions = load_jsonl_file(args.output_actions)
             activity_mapping = load_json_file(action_to_activity_mapping_file)
-            activity_mapper = ActivityMapper(actions, activity_mapping)
+            activity_mapper = ActivityMapper(activity_mapping)
 
-            activities = activity_mapper.map()
+            activities = activity_mapper.map(actions)
+
             save_to_jsonl_file(activities, args.output_activities)
             print(f"Step 2 completed. Activities saved to: {args.output_activities}")
 

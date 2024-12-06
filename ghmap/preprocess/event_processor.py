@@ -103,11 +103,11 @@ class EventProcessor:
         """
         return [event for event in events if event.get('org', {}).get('login') not in self.orgs_to_remove]
 
-    def process(self) -> None:
+    def process(self) -> List[Dict]:
         """
-        Processes each file in the input folder, filters events, and writes the processed events to separate output files.
+        Processes each file in the input folder, filters events, and returns the processed events.
         """
-        os.makedirs(self.output_folder, exist_ok=True)  # Ensure output folder exists
+        all_processed_events = []  # List to store all processed events
 
         for filename in sorted(os.listdir(self.input_folder)):
             if filename.endswith('.json'):
@@ -120,7 +120,7 @@ class EventProcessor:
                 # Filter redundant review events
                 events = self._filter_redundant_review_events(events)
 
-                # Save processed events to an individual output file
-                output_path = os.path.join(self.output_folder, filename)
-                with open(output_path, 'w') as out_file:
-                    json.dump(events, out_file, indent=2)
+                # Add processed events to the list
+                all_processed_events.extend(events)
+
+        return all_processed_events

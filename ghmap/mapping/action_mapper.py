@@ -1,7 +1,7 @@
 import json
 import re
 from datetime import datetime, timezone
-from typing import Dict, Any
+from typing import List, Dict, Any
 
 
 class ActionMapper:
@@ -102,18 +102,28 @@ class ActionMapper:
 
         return value
 
-    def map(self, event_record: Dict) -> Dict:
+    def map(self, events: List[Dict]) -> List[Dict]:
         """
-        Maps an event to a high-level action based on event type and attributes.
+        Maps a list of events to high-level actions based on event type and attributes.
+        Returns a list of mapped actions.
         """
-        event_record = self._deserialize_payload(event_record)
-        event_record = self._convert_date_to_iso(event_record)
-        event_type = event_record.get('type')
+        all_mapped_actions = []
 
-        for action_name, action_details in self.action_mapping['actions'].items():
-            if event_type == action_details['event']['type'] and \
-                    all(self._match_condition(self._extract_field(event_record, k), v)
-                        for k, v in action_details['event'].items() if k != 'type'):
-                return self._extract_attributes(event_record, action_details, action_name)
+        for event_record in events:
+            event_record = self._deserialize_payload(event_record)
+            event_record = self._convert_date_to_iso(event_record)
+            event_type = event_record.get('type')
 
-        return self._extract_attributes(event_record, self.action_mapping['actions']['UnknownAction'], 'UnknownAction')
+            for action_name, action_details in self.action_mapping['actions'].items():
+                if event_type == action_details['event']['type'] and \
+                        all(self._match_condition(self._extract_field(event_record, k), v)
+                            for k, v in action_details['event'].items() if k != 'type'):
+                    mapped_action = self._extract_attributes(event_record, action_details, action_name)
+                    all_mapped_actions.append(mapped_action)
+                    break
+            else:
+                # Handle case where no matching action was found
+                mapped_action = self._extract_attributes(event_record, self.action_mapping['actions']['UnknownAction'], 'UnknownAction')
+                all_mapped_actions.append(mapped_action)
+
+        return all_mapped_actions

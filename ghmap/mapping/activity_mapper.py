@@ -7,14 +7,12 @@ class ActivityMapper:
     A class to map GitHub actions to high-level activities based on predefined mapping rules.
 
     Attributes:
-        actions (List[Dict]): List of actions to process.
         activity_mapping (Dict): Predefined mapping of activities and rules.
         activities (List[Dict]): List of mapped activities.
         used_ids (set): Set of action IDs that have been processed.
     """
 
-    def __init__(self, actions: List[Dict], activity_mapping: Dict):
-        self.actions = actions
+    def __init__(self, activity_mapping: Dict):
         self.activity_mapping = self._preprocess_activities(activity_mapping)
         self.activities = []
         self.used_ids = set()
@@ -130,21 +128,21 @@ class ActivityMapper:
         preserved.extend(invalid)
         return validated, start_idx + len(validated), preserved
 
-    def map(self) -> List[Dict]:
+    def map(self, actions: List[Dict]) -> List[Dict]:
         """
         Map actions to activities based on the predefined activity mapping.
         """
-        grouped = self._group_actions(self.actions)
+        grouped = self._group_actions(actions)
 
-        for actions in grouped.values():
+        for actions_group in grouped.values():
             i = 0
-            while i < len(actions):
-                if actions[i]["event_id"] in self.used_ids:
+            while i < len(actions_group):
+                if actions_group[i]["event_id"] in self.used_ids:
                     i += 1
                     continue
 
                 for activity in self.activity_mapping["activities"]:
-                    gathered, next_idx, preserved = self._gather_actions(actions, i, activity)
+                    gathered, next_idx, preserved = self._gather_actions(actions_group, i, activity)
                     if gathered:
                         self.activities.append({
                             "activity": activity["name"],
@@ -155,7 +153,7 @@ class ActivityMapper:
                             "actions": [{k: a[k] for k in ("action", "event_id", "date", "details")} for a in gathered]
                         })
                         self.used_ids.update(a["event_id"] for a in gathered)
-                        actions = [a for a in actions if a["event_id"] not in self.used_ids]
+                        actions_group = [a for a in actions_group if a["event_id"] not in self.used_ids]
                         i = 0
                         break
                 else:
