@@ -23,6 +23,9 @@ classifiers = [
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
 ]
+dependencies = [
+  "tqdm"
+]
 
 [project.scripts]
 ghmap = "ghmap.cli:main"
@@ -32,8 +35,3 @@ include = ["ghmap"]
 
 [tool.setuptools.package-data]
 ghmap = ["action_to_activity.json", "event_to_action.json"]
-
-[project.dependencies]
-dependencies = [
-  "tqdm"
-]
