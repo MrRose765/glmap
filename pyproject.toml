@@ -34,4 +34,6 @@ include = ["ghmap"]
 ghmap = ["action_to_activity.json", "event_to_action.json"]
 
 [project.dependencies]
-tqdm = "*"
+dependencies = [
+  "tqdm"
+]
