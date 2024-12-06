@@ -28,7 +28,7 @@ classifiers = [
 ghamap = "ghamap.cli:main"
 
 [tool.setuptools.packages.find]
-where = ["config"]
+include = ["ghamap"]
 
 [tool.setuptools.package-data]
 ghamap = ["action_to_activity.json", "event_to_action.json"]
