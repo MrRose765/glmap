@@ -73,10 +73,10 @@ ghmap --raw-events /path/to/raw-events --output-actions /path/to/output-actions.
 
 Arguments:
 
-- --raw-events: The path to the folder containing raw GitHub event files.
-- --output-actions: The path to save the mapped actions (JSONL format).
-- --output-activities: The path to save the grouped activities (JSONL format).
-- --orgs-to-remove: A list of GitHub organizations to exclude from the raw events.
+- --raw-events: (Required) The path to the folder containing raw GitHub event files (in .json format). You can provide either a directory path or a single file. If a directory is specified, all .json files in the directory will be processed.
+- --output-actions: (Required) The path to the output file for storing the mapped actions. The result will be saved in JSONL format.
+- --output-activities: (Required) The path to the output file for storing the mapped activities. This will also be saved in JSONL format.
+- --orgs-to-remove: (Optional) A list of organizations to remove from the raw events. Events belonging to the specified organizations will be filtered out during processing.
 
 ## Mapping Process
 

@@ -110,14 +110,32 @@ class EventProcessor:
 
     def process(self) -> List[Dict]:
         """
-        Processes each file in the input folder, filters events, and returns the processed events.
+        Processes the input folder or a single file, filters events, and returns the processed events.
         """
         all_processed_events = []  # List to store all processed events
 
-        # Loop over files and add a progress bar
-        for filename in tqdm(sorted(os.listdir(self.input_folder)), desc="Processing event files"):
-            if filename.endswith('.json'):
-                with open(os.path.join(self.input_folder, filename), 'r') as f:
+        # Check if the input is a directory or a single file
+        if os.path.isdir(self.input_folder):
+            # Loop over files in the input folder with tqdm
+            for filename in tqdm(sorted(os.listdir(self.input_folder)), desc="Processing event files"):
+                if filename.endswith('.json'):
+                    file_path = os.path.join(self.input_folder, filename)
+                    with open(file_path, 'r') as f:
+                        events = json.load(f)
+
+                    # Remove events from unwanted organizations
+                    events = self._remove_unwanted_orgs(events)
+
+                    # Filter redundant review events
+                    events = self._filter_redundant_review_events(events)
+
+                    # Add processed events to the list
+                    all_processed_events.extend(events)
+
+        elif os.path.isfile(self.input_folder):
+            # Process a single file with tqdm for consistency
+            with tqdm(total=1, desc="Processing event file") as pbar:
+                with open(self.input_folder, 'r') as f:
                     events = json.load(f)
 
                 # Remove events from unwanted organizations
@@ -128,5 +146,6 @@ class EventProcessor:
 
                 # Add processed events to the list
                 all_processed_events.extend(events)
+                pbar.update(1)
 
         return all_processed_events
