@@ -135,7 +135,6 @@ class ActivityMapper:
         """
         grouped = self._group_actions(actions)
 
-        all_activities = []
         # Add progress bar for processing each grouped set of actions
         for actions_group in tqdm(grouped.values(), desc="Mapping actions to activities", unit="group"):
             i = 0
@@ -147,7 +146,7 @@ class ActivityMapper:
                 for activity in self.activity_mapping["activities"]:
                     gathered, next_idx, preserved = self._gather_actions(actions_group, i, activity)
                     if gathered:
-                        all_activities.append({
+                        self.activities.append({
                             "activity": activity["name"],
                             "start_date": gathered[0]["date"],
                             "end_date": gathered[-1]["date"],
@@ -166,5 +165,5 @@ class ActivityMapper:
         if unused_ids:
             print(f"Warning: Unused actions: {unused_ids}")
 
-        all_activities.sort(key=lambda x: x["start_date"])
-        return all_activities
+        self.activities.sort(key=lambda x: x["start_date"])
+        return self.activities
