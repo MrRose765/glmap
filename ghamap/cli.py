@@ -1,10 +1,10 @@
 import argparse
 import os
 import tempfile
-from preprocess.event_processor import EventProcessor
-from mapping.action_mapper import ActionMapper
-from mapping.activity_mapper import ActivityMapper
-from utils import load_json_file, save_to_jsonl_file, load_jsonl_file
+from .preprocess.event_processor import EventProcessor
+from .mapping.action_mapper import ActionMapper
+from .mapping.activity_mapper import ActivityMapper
+from .utils import load_json_file, save_to_jsonl_file, load_jsonl_file
 
 
 def main():
