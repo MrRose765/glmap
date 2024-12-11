@@ -21,7 +21,6 @@ def main():
         print("Step 0: Preprocessing events...")
         processor = EventProcessor()
         
-        print("List of actors to remove from the raw events :", args.actors_to_remove)
         events = processor.process(args.raw_events, args.actors_to_remove, args.repos_to_remove, args.orgs_to_remove)  # Returns processed events
 
         # Step 1: Event to Action Mapping
