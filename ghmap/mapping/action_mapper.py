@@ -1,6 +1,6 @@
 import json
 import re
-from datetime import datetime, timezone
+from datetime import datetime
 from typing import List, Dict, Any
 from tqdm import tqdm
 
