@@ -11,6 +11,8 @@ def main():
     parser.add_argument('--raw-events', required=True, help="Path to the folder containing raw events.")
     parser.add_argument('--output-actions', required=True, help="Path to the output file for mapped actions.")
     parser.add_argument('--output-activities', required=True, help="Path to the output file for mapped activities.")
+    parser.add_argument('--actors-to-remove', nargs='*', default=[], help="List of actors to remove from the raw events.")
+    parser.add_argument('--repos-to-remove', nargs='*', default=[], help="List of repositories to remove from the raw events.")
     parser.add_argument('--orgs-to-remove', nargs='*', default=[], help="List of organizations to remove from the raw events.")
     args = parser.parse_args()
 
@@ -19,7 +21,8 @@ def main():
         print("Step 0: Preprocessing events...")
         processor = EventProcessor()
         
-        events = processor.process(args.raw_events, args.orgs_to_remove)  # Returns processed events
+        print("List of actors to remove from the raw events :", args.actors_to_remove)
+        events = processor.process(args.raw_events, args.actors_to_remove, args.repos_to_remove, args.orgs_to_remove)  # Returns processed events
 
         # Step 1: Event to Action Mapping
         event_to_action_mapping_file = files("ghmap").joinpath("config", "event_to_action.json")

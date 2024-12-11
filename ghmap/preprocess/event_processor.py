@@ -96,13 +96,27 @@ class EventProcessor:
 
         return filtered_events
 
+    def _remove_unwanted_actors(self, events: List[Dict], actors_to_remove: List[str]) -> List[Dict]:
+        """
+        Filters out events belonging to unwanted actors.
+        """
+        return [event for event in events if event.get('actor', {}).get('login') not in actors_to_remove]
+
+
+    def _remove_unwanted_repos(self, events: List[Dict], repos_to_remove: List[str]) -> List[Dict]:
+        """
+        Filters out events belonging to unwanted repositories.
+        """
+        return [event for event in events if event.get('repo', {}).get('name') not in repos_to_remove]
+
+
     def _remove_unwanted_orgs(self, events: List[Dict], orgs_to_remove: List[str]) -> List[Dict]:
         """
         Filters out events belonging to unwanted organizations.
         """
         return [event for event in events if event.get('org', {}).get('login') not in orgs_to_remove]
 
-    def process(self, input_folder: str, orgs_to_remove: List[str]) -> List[Dict]:
+    def process(self, input_folder: str, actors_to_remove: List[str], repos_to_remove: List[str], orgs_to_remove: List[str]) -> List[Dict]:
         """
         Processes the input folder or a single file, filters events, and returns the processed events.
         """
@@ -116,6 +130,12 @@ class EventProcessor:
                     file_path = os.path.join(input_folder, filename)
                     with open(file_path, 'r') as f:
                         events = json.load(f)
+
+                    # Remove events from unwanted actors
+                    events = self._remove_unwanted_actors(events, actors_to_remove)
+
+                    # Remove events from unwanted repositories
+                    events = self._remove_unwanted_repos(events, repos_to_remove)
 
                     # Remove events from unwanted organizations
                     events = self._remove_unwanted_orgs(events, orgs_to_remove)
@@ -131,6 +151,12 @@ class EventProcessor:
             with tqdm(total=1, desc="Processing event file") as pbar:
                 with open(input_folder, 'r') as f:
                     events = json.load(f)
+
+                # Remove events from unwanted actors
+                events = self._remove_unwanted_actors(events, actors_to_remove)
+
+                # Remove events from unwanted repositories
+                events = self._remove_unwanted_repos(events, repos_to_remove)
 
                 # Remove events from unwanted organizations
                 events = self._remove_unwanted_orgs(events, orgs_to_remove)
