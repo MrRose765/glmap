@@ -1,4 +1,0 @@
-recursive-include ghmap/config *.json
-recursive-include ghmap/mapping *.py
-recursive-include ghmap/preprocess *.py
-recursive-include ghmap *.py
