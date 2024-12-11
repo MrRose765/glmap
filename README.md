@@ -68,7 +68,9 @@ This will install the tool along with its dependencies, including tqdm for progr
 ## Usage
 Once installed, you can use the ghmap tool to process raw GitHub events. Here’s an example of how to run the tool:
 ```bash
-ghmap --raw-events /path/to/raw-events --output-actions /path/to/output-actions.jsonl --output-activities /path/to/output-activities.jsonl
+ghmap --raw-events /path/to/raw-events \
+      --output-actions /path/to/output-actions.jsonl \
+      --output-activities /path/to/output-activities.jsonl
 ```
 
 Arguments:
