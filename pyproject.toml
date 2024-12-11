@@ -31,7 +31,7 @@ dependencies = [
 ghmap = "ghmap.cli:main"
 
 [tool.setuptools]
-packages = "find:"
+packages = ["ghmap", "ghmap.preprocess", "ghmap.mapping"]
 
 [tool.setuptools.package-data]
-ghmap = ["action_to_activity.json", "event_to_action.json"]
+ghmap = ["event_to_action.json", "action_to_activity.json"]
