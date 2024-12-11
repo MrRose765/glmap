@@ -9,17 +9,11 @@ class EventProcessor:
     A class to process GitHub events, removing unwanted events and filtering redundant review events.
 
     Attributes:
-        orgs_to_remove (List[str]): List of organizations to exclude from the raw events.
-        input_folder (str): Path to the folder containing raw events.
-        output_folder (str): Path to the folder where processed events will be saved.
         processed_ids (set): Set of event IDs that have been processed.
         pending_events (List[Dict]): Stores events pending processing across files.
     """
 
-    def __init__(self, orgs_to_remove: List[str], input_folder: str, output_folder: str):
-        self.orgs_to_remove = orgs_to_remove
-        self.input_folder = input_folder
-        self.output_folder = output_folder
+    def __init__(self):
         self.processed_ids = set()  # Track event IDs across all files
         self.pending_events = []    # Store end-of-file events for cross-file checks
 
@@ -102,29 +96,29 @@ class EventProcessor:
 
         return filtered_events
 
-    def _remove_unwanted_orgs(self, events: List[Dict]) -> List[Dict]:
+    def _remove_unwanted_orgs(self, events: List[Dict], orgs_to_remove: List[str]) -> List[Dict]:
         """
         Filters out events belonging to unwanted organizations.
         """
-        return [event for event in events if event.get('org', {}).get('login') not in self.orgs_to_remove]
+        return [event for event in events if event.get('org', {}).get('login') not in orgs_to_remove]
 
-    def process(self) -> List[Dict]:
+    def process(self, input_folder: str, orgs_to_remove: List[str]) -> List[Dict]:
         """
         Processes the input folder or a single file, filters events, and returns the processed events.
         """
         all_processed_events = []  # List to store all processed events
 
         # Check if the input is a directory or a single file
-        if os.path.isdir(self.input_folder):
+        if os.path.isdir(input_folder):
             # Loop over files in the input folder with tqdm
-            for filename in tqdm(sorted(os.listdir(self.input_folder)), desc="Processing event files"):
+            for filename in tqdm(sorted(os.listdir(input_folder)), desc="Processing event files"):
                 if filename.endswith('.json'):
-                    file_path = os.path.join(self.input_folder, filename)
+                    file_path = os.path.join(input_folder, filename)
                     with open(file_path, 'r') as f:
                         events = json.load(f)
 
                     # Remove events from unwanted organizations
-                    events = self._remove_unwanted_orgs(events)
+                    events = self._remove_unwanted_orgs(events, orgs_to_remove)
 
                     # Filter redundant review events
                     events = self._filter_redundant_review_events(events)
@@ -132,14 +126,14 @@ class EventProcessor:
                     # Add processed events to the list
                     all_processed_events.extend(events)
 
-        elif os.path.isfile(self.input_folder):
+        elif os.path.isfile(input_folder):
             # Process a single file with tqdm for consistency
             with tqdm(total=1, desc="Processing event file") as pbar:
-                with open(self.input_folder, 'r') as f:
+                with open(input_folder, 'r') as f:
                     events = json.load(f)
 
                 # Remove events from unwanted organizations
-                events = self._remove_unwanted_orgs(events)
+                events = self._remove_unwanted_orgs(events, orgs_to_remove)
 
                 # Filter redundant review events
                 events = self._filter_redundant_review_events(events)
