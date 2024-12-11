@@ -8,25 +8,25 @@ For the complete NumFocus dataset, including actions and activities spanning 21 
 
 ```
 .
-├── LICENSE                    # License file for the project (MIT License)
-├── MANIFEST.in                # Specifies files to include in the package distribution
-├── README.md                  # Project documentation with installation and usage instructions
-├── ghmap                       # Main package directory containing all tool-related code
-│   ├── __init__.py             # Initialization file for the `ghmap` package
-│   ├── cli.py                  # Command-line interface script to run the tool
-│   ├── config                  # Directory containing mapping configuration files
-│   │   ├── action_to_activity.json  # JSON file defining the mapping from actions to activities
-│   │   └── event_to_action.json    # JSON file defining the mapping from events to actions
-│   ├── mapping                 # Directory containing the logic for event to action, and action to activity mapping
-│   │   ├── __init__.py         # Initialization file for the `mapping` module
-│   │   ├── action_mapper.py    # Class responsible for mapping GitHub events to high-level actions
-│   │   └── activity_mapper.py  # Class responsible for mapping actions to structured activities
-│   ├── preprocess              # Directory containing preprocessing logic for raw GitHub events
-│   │   ├── __init__.py         # Initialization file for the `preprocess` module
-│   │   └── event_processor.py  # Class responsible for processing raw GitHub events (removing unwanted events, filtering)
-│   └── utils.py                # Utility functions used across the tool (e.g., file loading, saving data)
-├── pyproject.toml             # Project metadata and dependencies for building and packaging the tool
-└── setup.py                   # Setup file for installing the package (setuptools)
+├── LICENSE                    # License file (MIT License)
+├── README.md                  # Project documentation (this file)
+├── ghmap                      # Main package directory containing all tool-related code
+│   ├── __init__.py            # Initialization file for the `ghmap` package
+│   ├── cli.py                 # Command-line interface to run the tool
+│   ├── config                 # Directory for mapping configuration files
+│   │   ├── action_to_activity.json  # Maps actions to activities
+│   │   └── event_to_action.json    # Maps events to actions
+│   ├── mapping                # Mapping logic for event and action handling
+│   │   ├── __init__.py        # Initialization file for the `mapping` module
+│   │   ├── action_mapper.py   # Maps GitHub events to high-level actions
+│   │   └── activity_mapper.py # Maps actions to structured activities
+│   ├── preprocess             # Preprocessing logic for raw GitHub events
+│   │   ├── __init__.py        # Initialization file for the `preprocess` module
+│   │   └── event_processor.py # Processes raw GitHub events (e.g., filtering unwanted events)
+│   └── utils.py               # Utility functions (e.g., file loading, saving data)
+├── pyproject.toml             # Project metadata and dependencies (build configuration)
+├── requirements.txt           # Dependencies required for the project
+└── setup.py                   # Backward-compatible setup script
 ```
 
 
@@ -73,10 +73,12 @@ ghmap --raw-events /path/to/raw-events --output-actions /path/to/output-actions.
 
 Arguments:
 
-- --raw-events: (Required) The path to the folder containing raw GitHub event files (in .json format). You can provide either a directory path or a single file. If a directory is specified, all .json files in the directory will be processed.
-- --output-actions: (Required) The path to the output file for storing the mapped actions. The result will be saved in JSONL format.
-- --output-activities: (Required) The path to the output file for storing the mapped activities. This will also be saved in JSONL format.
-- --orgs-to-remove: (Optional) A list of organizations to remove from the raw events. Events belonging to the specified organizations will be filtered out during processing.
+- --raw-events (Required): Path to the folder or file containing raw GitHub event data (.json format).
+- --output-actions (Required): Path to save the mapped actions (JSONL format).
+- --output-activities (Required): Path to save the mapped activities (JSONL format).
+- --actors-to-remove (Optional): List of actors (contributors) to exclude from the events.
+- --repos-to-remove (Optional): List of repositories to exclude from the events.
+- --orgs-to-remove (Optional): List of organizations to exclude from the events.
 
 ## Mapping Process
 
