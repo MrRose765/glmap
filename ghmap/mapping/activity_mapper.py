@@ -9,13 +9,11 @@ class ActivityMapper:
 
     Attributes:
         activity_mapping (Dict): Predefined mapping of activities and rules.
-        activities (List[Dict]): List of mapped activities.
         used_ids (set): Set of action IDs that have been processed.
     """
 
     def __init__(self, activity_mapping: Dict):
         self.activity_mapping = self._preprocess_activities(activity_mapping)
-        self.activities = []
         self.used_ids = set()
 
     @staticmethod
@@ -134,6 +132,7 @@ class ActivityMapper:
         Map actions to activities based on the predefined activity mapping.
         """
         grouped = self._group_actions(actions)
+        all_mapped_activities = []
 
         # Add progress bar for processing each grouped set of actions
         for actions_group in tqdm(grouped.values(), desc="Mapping actions to activities", unit="group"):
@@ -146,7 +145,7 @@ class ActivityMapper:
                 for activity in self.activity_mapping["activities"]:
                     gathered, next_idx, preserved = self._gather_actions(actions_group, i, activity)
                     if gathered:
-                        self.activities.append({
+                        all_mapped_activities.append({
                             "activity": activity["name"],
                             "start_date": gathered[0]["date"],
                             "end_date": gathered[-1]["date"],
@@ -165,5 +164,5 @@ class ActivityMapper:
         if unused_ids:
             print(f"Warning: Unused actions: {unused_ids}")
 
-        self.activities.sort(key=lambda x: x["start_date"])
-        return self.activities
+        all_mapped_activities.sort(key=lambda x: x["start_date"])
+        return all_mapped_activities
