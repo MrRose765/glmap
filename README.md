@@ -1,6 +1,6 @@
 # ghmap: GitHub Event Mapping Tool
 
-ghmap is a Python-based tool designed to process raw GitHub event data and convert it into higher-level, structured actions & activities that reflect contributors’ real intent. By transforming low-level events like PullRequestEvent, CreateEvent, and PushEvent into more meaningful actions and activities, ghmap makes it easier to analyze and understand contributor behavior in large GitHub repositories.
+ghmap is a Python-based tool designed to process raw GitHub event data and convert it into higher-level, structured actions & activities that reflect contributors’ real intent. By transforming low-level events like PullRequestEvent, CreateEvent, and PushEvent into more meaningful actions and activities, ghmap makes it easier to analyze and understand contributor behavior in large GitHub repositories. Full mappings for events → actions and actions → activities can be found in [event_to_action.json](https://github.com/uhourri/ghmap/blob/main/ghmap/config/event_to_action.json) and [action_to_activity.json](https://github.com/uhourri/ghmap/blob/main/ghmap/config/action_to_activity.json)
 
 The dataset, **"A Dataset of Contributor Activities in the NumFocus Open-Source Community"**, was built using ghmap. It includes +2M activities from +180K contributors across 2.8K repositories and 58 projects over three years. Access it on [Zenodo](https://doi.org/10.5281/zenodo.14230406).
 
