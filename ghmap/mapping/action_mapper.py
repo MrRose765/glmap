@@ -15,6 +15,8 @@ class ActionMapper:
 
     def __init__(self, action_mapping: Dict):
         self.action_mapping = action_mapping
+        self.event_type_key = action_mapping['parameters'].get('event_type', 'type')
+        self.tqdm_disable = action_mapping['parameters'].get('tqdm_disable', False)
 
     @staticmethod
     def _deserialize_payload(event_record: Dict) -> Dict:
@@ -34,6 +36,9 @@ class ActionMapper:
         created_at = event_record.get('created_at')
 
         if isinstance(created_at, str):
+            # If the date has milliseconds, remove them
+            if '.' in created_at:
+                created_at = created_at.split('.')[0] + "Z"
             event_record['created_at'] = datetime.strptime(created_at, '%Y-%m-%dT%H:%M:%SZ').strftime('%Y-%m-%dT%H:%M:%SZ')
 
         elif isinstance(created_at, int):
@@ -120,10 +125,13 @@ class ActionMapper:
         all_mapped_actions = []
 
         # Add progress bar for processing each event
-        for event_record in tqdm(events, desc="Mapping events to actions", unit="event"):
-            event_record = self._deserialize_payload(event_record)
+        for event_record in tqdm(events, desc="Mapping events to actions", unit="event", disable=self.tqdm_disable):
+            # If the dict contains a 'payload' field, deserialize it
+            if 'payload' in event_record:
+                event_record = self._deserialize_payload(event_record)
             event_record = self._convert_date_to_iso(event_record)
-            event_type = event_record.get('type')
+            event_type = self._extract_field(event_record, self.event_type_key)
+            print(event_type)
 
             for action_name, action_details in self.action_mapping['actions'].items():
                 if event_type == action_details['event']['type'] and \

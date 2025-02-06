@@ -6,6 +6,10 @@
       "created": "2024-10-07",
       "license": "MIT"
     },
+    "parameters": {
+      "event_type": "type",
+      "tqdm_disable": true
+    },
     "common_fields": {
       "event_id": "id",
       "date": "created_at",
