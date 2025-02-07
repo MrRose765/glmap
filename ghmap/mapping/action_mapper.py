@@ -131,10 +131,9 @@ class ActionMapper:
                 event_record = self._deserialize_payload(event_record)
             event_record = self._convert_date_to_iso(event_record)
             event_type = self._extract_field(event_record, self.event_type_key)
-            print(event_type)
 
             for action_name, action_details in self.action_mapping['actions'].items():
-                if event_type == action_details['event']['type'] and \
+                if event_type == action_details['event'].get('type', None) and \
                         all(self._match_condition(self._extract_field(event_record, k), v)
                             for k, v in action_details['event'].items() if k != 'type'):
                     mapped_action = self._extract_attributes(event_record, action_details, action_name)
