@@ -70,15 +70,18 @@ class ActivityMapper:
                 validated.append(action)
                 continue
 
-            is_valid = any(
+            is_valid = all(
+                not any(target["action"] == rule["target_action"] for target in gathered) or
                 all(
-                    self._get_nested_value(action["details"], field["field"]) ==
-                    self._get_nested_value(target["details"], field["target_field"])
-                    for field in rule["fields"]
+                    all(
+                        self._get_nested_value(action["details"], field["field"]) ==
+                        self._get_nested_value(target["details"], field["target_field"])
+                        for field in rule["fields"]
+                    )
+                    for target in gathered
+                    if target["action"] == rule["target_action"] and target["event_id"] != action["event_id"]
                 )
                 for rule in config["validate_with"]
-                for target in gathered
-                if target["event_id"] != action["event_id"]  # Skip the same action
             )
 
             (validated if is_valid else invalid).append(action)
