@@ -9,7 +9,7 @@
 [![Dependencies](https://img.shields.io/badge/Dependencies-monitored-brightgreen)](https://github.com/uhourri/ghmap/security/dependabot)
 
 <!-- Meta -->
-[![PyPI](https://badgen.net/pypi/v/ghmap)](https://pypi.org/project/ghmap)
+[![PyPI](https://badgen.net/pypi/v/ghmap?cachebuster=1)](https://pypi.org/project/ghmap)
 [![Commits](https://badgen.net/github/last-commit/uhourri/ghmap)](https://github.com/uhourri/ghmap/commits/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![SWH](https://archive.softwareheritage.org/badge/origin/https://github.com/uhourri/ghmap/)](https://archive.softwareheritage.org/browse/origin/?origin_url=https://github.com/uhourri/ghmap)
