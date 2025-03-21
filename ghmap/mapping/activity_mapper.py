@@ -21,7 +21,9 @@ class ActivityMapper:
     @staticmethod
     def _preprocess_activities(activity_mapping: Dict) -> Dict:
         for activity in activity_mapping["activities"]:
-            activity["time_window"] = timedelta(seconds=int(activity["time_window"].replace("s", "")))
+            activity["time_window"] = timedelta(
+                seconds=int(activity["time_window"].replace("s", ""))
+            )
         return activity_mapping
 
     @staticmethod
@@ -94,9 +96,7 @@ class ActivityMapper:
         }
 
         for i, action in enumerate(actions[start_idx:], start_idx):
-            if gathered and not self._within_time_limit(
-                gathered[-1]["date"], action["date"], time_window
-            ):
+            if gathered and not self._within_time_limit(gathered[-1]["date"], action["date"], time_window):
                 preserved.extend(actions[i:])
                 break
 
@@ -104,8 +104,7 @@ class ActivityMapper:
                 preserved.extend(actions[i:])
                 break
 
-            if action["action"] in rules["repeatable"] or \
-                    action["action"] not in {a["action"] for a in gathered}:
+            if action["action"] in rules["repeatable"] or action["action"] not in {a["action"] for a in gathered}:
                 gathered.append(action)
                 if action["action"] in rules["required"]:
                     found_required.add(action["action"])
@@ -122,6 +121,7 @@ class ActivityMapper:
         return validated, start_idx + len(validated), preserved
 
     def map(self, actions: List[Dict]) -> List[Dict]:
+        """Map actions to activities based on activity mapping configuration."""
         grouped = self._group_actions(actions)
         all_mapped_activities = []
 
@@ -133,7 +133,7 @@ class ActivityMapper:
                     continue
 
                 for activity in self.activity_mapping["activities"]:
-                    gathered, next_idx, preserved = self._gather_actions(actions_group, i, activity)
+                    gathered, _, _ = self._gather_actions(actions_group, i, activity)
                     if gathered:
                         all_mapped_activities.append({
                             "activity": activity["name"],
