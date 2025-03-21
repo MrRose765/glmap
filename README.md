@@ -21,28 +21,36 @@ The dataset, **"A Dataset of Contributor Activities in the NumFocus Open-Source 
 
 ## Repository Structure
 
+<pre><code>
 ```
 .
-├── LICENSE                    # License file (MIT License)
-├── README.md                  # Project documentation (this file)
-├── ghmap                      # Main package directory containing all tool-related code
-│   ├── __init__.py            # Initialization file for the `ghmap` package
-│   ├── cli.py                 # Command-line interface to run the tool
-│   ├── config                 # Directory for mapping configuration files
-│   │   ├── action_to_activity.json  # Maps actions to activities
-│   │   └── event_to_action.json    # Maps events to actions
-│   ├── mapping                # Mapping logic for event and action handling
-│   │   ├── __init__.py        # Initialization file for the `mapping` module
-│   │   ├── action_mapper.py   # Maps GitHub events to high-level actions
-│   │   └── activity_mapper.py # Maps actions to structured activities
-│   ├── preprocess             # Preprocessing logic for raw GitHub events
-│   │   ├── __init__.py        # Initialization file for the `preprocess` module
-│   │   └── event_processor.py # Processes raw GitHub events (e.g., filtering unwanted events)
-│   └── utils.py               # Utility functions (e.g., file loading, saving data)
-├── pyproject.toml             # Project metadata and dependencies (build configuration)
-├── requirements.txt           # Dependencies required for the project
-└── setup.py                   # Backward-compatible setup script
+├── LICENSE                       # Project license (MIT)
+├── README.md                     # Project overview and documentation
+├── ghmap/                        # Main Python package for GH mapping tool
+│   ├── __init__.py               # Marks ghmap as a Python package
+│   ├── cli.py                    # Command-line interface entry point
+│   ├── config/                   # JSON configs for event/action mappings
+│   │   ├── action_to_activity.json   # Rules to map actions → activities
+│   │   └── event_to_action.json      # Rules to map events → actions
+│   ├── mapping/                 # Logic for mapping events and actions
+│   │   ├── __init__.py
+│   │   ├── action_mapper.py      # Maps raw events to high-level actions
+│   │   └── activity_mapper.py    # Groups actions into structured activities
+│   ├── preprocess/              # Event preprocessing logic
+│   │   ├── __init__.py
+│   │   └── event_processor.py    # Cleans and filters GitHub events
+│   └── utils.py                  # Utility functions (load/save helpers)
+├── pyproject.toml                # Build system, dependencies, and metadata
+├── requirements.txt              # List of Python dependencies
+├── setup.py                      # Legacy install script for compatibility
+└── tests/                        # Test suite for CLI and mapping logic
+    ├── test_cli.py               # CLI integration test using sample data
+    └── data/                     # Test fixtures and expected outputs
+        ├── sample-events.json         # Input sample GitHub events
+        ├── expected-actions.jsonl     # Expected mapped actions
+        └── expected-activities.jsonl  # Expected final activities
 ```
+</code></pre>
 
 
 ## Installation
