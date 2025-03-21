@@ -96,7 +96,7 @@ class ActivityMapper: # pylint: disable=too-few-public-methods
         }
 
         for i, action in enumerate(actions[start_idx:], start_idx):
-            if gathered and not self._within_time_limit(gathered[-1]["date"], action["date"], time_window):
+            if gathered and not self._within_time_limit(gathered[-1]["date"], action["date"], time_window): # pylint: disable=line-too-long
                 preserved.extend(actions[i:])
                 break
 
