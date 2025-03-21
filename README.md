@@ -514,7 +514,6 @@ If you use this tool or dataset in your research, please cite:
 
 > **ghmap: GitHub Event Mapping Tool**  
 > Youness Hourri
-> GitHub Repository: https://github.com/uhourri/ghmap
 
 ```bibtex
 @software{hourri2025ghmap,
