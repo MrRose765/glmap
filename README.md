@@ -514,7 +514,6 @@ If you use this tool or dataset in your research, please cite:
 
 > **ghmap: GitHub Event Mapping Tool**  
 > Youness Hourri
-> _22nd International Conference on Mining Software Repositories (MSR)_  
 > GitHub Repository: https://github.com/uhourri/ghmap
 
 ```bibtex
