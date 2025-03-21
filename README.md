@@ -1,14 +1,18 @@
 # ghmap: GitHub Event Mapping Tool
 
+<!-- CI & QA -->
 [![Tests](https://github.com/uhourri/ghmap/actions/workflows/python-package.yml/badge.svg?branch=main)](https://github.com/uhourri/ghmap/actions/workflows/python-package.yml)
 [![Linting](https://github.com/uhourri/ghmap/actions/workflows/pylint.yml/badge.svg?branch=main)](https://github.com/uhourri/ghmap/actions/workflows/pylint.yml)
 [![CodeQL](https://github.com/uhourri/ghmap/actions/workflows/codeql.yml/badge.svg?branch=main)](https://github.com/uhourri/ghmap/actions/workflows/codeql.yml)
-[![Dependencies](https://img.shields.io/badge/Dependencies-monitored-green)](https://github.com/uhourri/ghmap/security/dependabot)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+
+<!-- Dependencies & Security -->
+[![Dependencies](https://img.shields.io/badge/Dependencies-monitored-brightgreen)](https://github.com/uhourri/ghmap/security/dependabot)
+
+<!-- Meta -->
 [![PyPI](https://badgen.net/pypi/v/ghmap)](https://pypi.org/project/ghmap)
 [![Commits](https://badgen.net/github/last-commit/uhourri/ghmap)](https://github.com/uhourri/ghmap/commits/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![SWH](https://archive.softwareheritage.org/badge/origin/https://github.com/uhourri/ghmap/)](https://archive.softwareheritage.org/browse/origin/?origin_url=https://github.com/uhourri/ghmap)
-
 
 ghmap is a Python-based tool designed to process raw GitHub event data and convert it into higher-level, structured actions & activities that reflect contributors’ real intent. By transforming low-level events like PullRequestEvent, CreateEvent, and PushEvent into more meaningful actions and activities, ghmap makes it easier to analyze and understand contributor behavior in large GitHub repositories. Full mappings for events → actions and actions → activities can be found in [event_to_action.json](https://github.com/uhourri/ghmap/blob/main/ghmap/config/event_to_action.json) and [action_to_activity.json](https://github.com/uhourri/ghmap/blob/main/ghmap/config/action_to_activity.json)
 
