@@ -1,6 +1,6 @@
-import json
+"""Utility functions for loading and saving JSON/JSONL files."""
 
-# Module for utility functions related to loading and saving JSON files.
+import json
 
 def load_jsonl_file(file_path):
     """Load actions from a JSON Lines file."""
