@@ -1,6 +1,4 @@
-"""CLI entry point for the ghmap tool.
-Processes GitHub event data and converts it into structured actions and activities.
-"""
+"""Command-line interface for the GitHub Event Mapping Tool."""
 
 import argparse
 from importlib.resources import files
@@ -9,38 +7,49 @@ from .mapping.action_mapper import ActionMapper
 from .mapping.activity_mapper import ActivityMapper
 from .utils import load_json_file, save_to_jsonl_file
 
+
 def main():
-    """Parse CLI arguments and run the GH mapping pipeline."""
+    """Parse arguments and run the event-to-activity mapping pipeline."""
     parser = argparse.ArgumentParser(
         description="Process GitHub events into structured activities."
     )
     parser.add_argument(
-        '--raw-events', required=True,
+        '--raw-events',
+        required=True,
         help="Path to the folder containing raw events."
     )
     parser.add_argument(
-        '--output-actions', required=True,
+        '--output-actions',
+        required=True,
         help="Path to the output file for mapped actions."
     )
     parser.add_argument(
-        '--output-activities', required=True,
+        '--output-activities',
+        required=True,
         help="Path to the output file for mapped activities."
     )
     parser.add_argument(
-        '--actors-to-remove', nargs='*', default=[],
+        '--actors-to-remove',
+        nargs='*',
+        default=[],
         help="List of actors to remove from the raw events."
     )
     parser.add_argument(
-        '--repos-to-remove', nargs='*', default=[],
+        '--repos-to-remove',
+        nargs='*',
+        default=[],
         help="List of repositories to remove from the raw events."
     )
     parser.add_argument(
-        '--orgs-to-remove', nargs='*', default=[],
+        '--orgs-to-remove',
+        nargs='*',
+        default=[],
         help="List of organizations to remove from the raw events."
     )
     args = parser.parse_args()
 
     try:
+        # Step 0: Event Preprocessing
         print("Step 0: Preprocessing events...")
         processor = EventProcessor()
         events = processor.process(
@@ -50,24 +59,25 @@ def main():
             args.orgs_to_remove
         )
 
-        print("Step 1: Mapping events to actions...")
-        event_to_action_mapping_file = files("ghmap").joinpath("config", "event_to_action.json")
-        action_mapping = load_json_file(event_to_action_mapping_file)
+        # Step 1: Event to Action Mapping
+        event_to_action_file = files("ghmap").joinpath("config", "event_to_action.json")
+        action_mapping = load_json_file(event_to_action_file)
         action_mapper = ActionMapper(action_mapping)
         actions = action_mapper.map(events)
         save_to_jsonl_file(actions, args.output_actions)
         print(f"Step 1 completed. Actions saved to: {args.output_actions}")
 
-        print("Step 2: Mapping actions to activities...")
-        action_to_activity_mapping_file = files("ghmap").joinpath("config", "action_to_activity.json")
-        activity_mapping = load_json_file(action_to_activity_mapping_file)
+        # Step 2: Action to Activity Mapping
+        action_to_activity_file = files("ghmap").joinpath("config", "action_to_activity.json")
+        activity_mapping = load_json_file(action_to_activity_file)
         activity_mapper = ActivityMapper(activity_mapping)
         activities = activity_mapper.map(actions)
         save_to_jsonl_file(activities, args.output_activities)
         print(f"Step 2 completed. Activities saved to: {args.output_activities}")
 
-    except Exception as err:  # pylint: disable=broad-exception-caught
-        print(f"An error occurred: {err}")
+    except Exception as e:  # pylint: disable=broad-exception-caught
+        print(f"An error occurred: {e}")
+
 
 if __name__ == '__main__':
     main()
