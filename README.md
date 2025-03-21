@@ -542,8 +542,6 @@ If you use this tool or dataset in your research, please cite:
 @software{hourri2025ghmap,
   author       = {Hourri, Youness},
   title        = {ghmap: GitHub Event Mapping Tool},
-  year         = {2025},
-  version      = {1.0.1},
   url          = {https://github.com/uhourri/ghmap},
   note         = {Accessed: 2025-03-21}
 }
