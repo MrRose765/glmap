@@ -1,6 +1,7 @@
 # ghmap: GitHub Event Mapping Tool
 
-[![Tests](https://github.com/uhourri/ghmap/actions/workflows/test.yaml/badge.svg?branch=main)](https://github.com/uhourri/ghmap/actions/workflows/test.yaml)
+[![Tests](https://github.com/uhourri/ghmap/actions/workflows/python-package.yml/badge.svg?branch=main)](https://github.com/uhourri/ghmap/actions/workflows/python-package.yml)
+[![Linting](https://github.com/uhourri/ghmap/actions/workflows/pylint.yml/badge.svg?branch=main)](https://github.com/uhourri/ghmap/actions/workflows/pylint.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![PyPI](https://badgen.net/pypi/v/ghmap)](https://pypi.org/project/ghmap)
 [![Commits](https://badgen.net/github/last-commit/uhourri/ghmap)](https://github.com/uhourri/ghmap/commits/)
