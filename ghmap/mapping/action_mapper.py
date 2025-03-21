@@ -7,9 +7,9 @@ from typing import List, Dict, Any
 from tqdm import tqdm
 
 
-class ActionMapper:
+class ActionMapper: # pylint: disable=too-few-public-methods
     """
-    A class to map GitHub events to high-level actions based on predefined event types and conditions.
+    A class to map events to high-level actions based on predefined event types and conditions.
 
     Attributes:
         action_mapping (Dict): Predefined mapping of actions and event rules.
@@ -41,7 +41,7 @@ class ActionMapper:
 
     @staticmethod
     def _match_condition(event_value: Any, mapping_value: Any) -> bool:
-        """Matches an event value against a mapping value with support for regex and nested structures."""
+        """Matches an event value against a mapping value."""
         if isinstance(mapping_value, dict):
             return all(
                 ActionMapper._match_condition(event_value.get(k), v)
