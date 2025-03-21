@@ -510,6 +510,24 @@ If you use this tool or dataset in your research, please cite:
 }
 ```
 
+### 🛠️ Tool
+
+> **ghmap: GitHub Event Mapping Tool**  
+> Youness Hourri
+> _22nd International Conference on Mining Software Repositories (MSR)_  
+> GitHub Repository: https://github.com/uhourri/ghmap
+
+```bibtex
+@software{hourri2025ghmap,
+  author       = {Hourri, Youness},
+  title        = {ghmap: GitHub Event Mapping Tool},
+  year         = {2025},
+  version      = {1.0.1},
+  url          = {https://github.com/uhourri/ghmap},
+  note         = {Accessed: 2025-03-21}
+}
+```
+
 ## Contributing
 
 Contributions are welcome! If you identify issues or have suggestions for improvement, please submit an issue or pull request.
