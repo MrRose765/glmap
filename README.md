@@ -84,7 +84,7 @@ source .venv/bin/activate
 
 Once the virtual environment is activated, you can install the project and its dependencies from the GitHub repository:
 ```bash
-pip install git+https://github.com/uhourri/ghmap.git
+pip install ghmap
 ```
 This will install the tool along with its dependencies, including tqdm for progress tracking during long computations.
 
