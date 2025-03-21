@@ -7,6 +7,7 @@
 
 <!-- Dependencies & Security -->
 [![Dependencies](https://img.shields.io/badge/Dependencies-monitored-brightgreen)](https://github.com/uhourri/ghmap/security/dependabot)
+[![codecov](https://codecov.io/gh/uhourri/ghmap/branch/main/graph/badge.svg)](https://codecov.io/gh/uhourri/ghmap)
 
 <!-- Meta -->
 [![PyPI](https://badgen.net/pypi/v/ghmap?cachebuster=1)](https://pypi.org/project/ghmap)
