@@ -487,6 +487,29 @@ A set of related actions is aggregated into a single activity. Each activity rec
 This step bridges the gap between granular operations and high-level task representations, enabling nuanced insights into contributor workflows.
 
 
+---
+
+## Citation
+
+If you use this tool or dataset in your research, please cite:
+
+### 📄 Paper
+
+> **A Dataset of Contributor Activities in the NumFocus Open-Source Community**  
+> Youness Hourri, Alexandre Decan, Tom Mens  
+> _22nd International Conference on Mining Software Repositories (MSR)_  
+> Ottawa (Ontario, Canada) on the 28th and 29th of April, 2025.
+
+```bibtex
+@inproceedings{hourri2025dataset,
+  title={A Dataset of Contributor Activities in the NumFocus Open-Source Community},
+  author={Hourri, Youness and Decan, Alexandre and Mens, Tom},
+  booktitle={22nd International Conference on Mining Software Repositories},
+  year={2025},
+  organization={IEEE}
+}
+```
+
 ## Contributing
 
 Contributions are welcome! If you identify issues or have suggestions for improvement, please submit an issue or pull request.
