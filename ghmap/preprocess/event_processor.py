@@ -6,9 +6,9 @@ from typing import List, Dict
 from tqdm import tqdm
 
 
-class EventProcessor:
+class EventProcessor: # pylint: disable=too-few-public-methods
     """
-    A class to process GitHub events, removing unwanted events and filtering redundant review events.
+    A class to process events, removing unwanted events and filtering redundant review events.
     """
 
     def __init__(self):

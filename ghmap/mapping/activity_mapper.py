@@ -5,7 +5,7 @@ from typing import List, Dict, Tuple, Any
 from tqdm import tqdm
 
 
-class ActivityMapper:
+class ActivityMapper: # pylint: disable=too-few-public-methods
     """
     A class to map GitHub actions to high-level activities based on predefined mapping rules.
 
@@ -52,7 +52,7 @@ class ActivityMapper:
             group.sort(key=lambda x: x["date"])
         return grouped
 
-    def _validate_gathered_actions(self, gathered: List[Dict], activity: Dict) -> Tuple[List[Dict], List[Dict]]:
+    def _validate_gathered_actions(self, gathered: List[Dict], activity: Dict) -> Tuple[List[Dict], List[Dict]]: # pylint: disable=line-too-long
         if len(gathered) == 1:
             return gathered, []
 
@@ -75,7 +75,7 @@ class ActivityMapper:
                         for field in rule["fields"]
                     )
                     for target in gathered
-                    if target["action"] == rule["target_action"] and target["event_id"] != action["event_id"]
+                    if target["action"] == rule["target_action"] and target["event_id"] != action["event_id"] # pylint: disable=line-too-long
                 )
                 for rule in config["validate_with"]
             )
@@ -84,7 +84,7 @@ class ActivityMapper:
 
         return validated, invalid
 
-    def _gather_actions(self, actions: List[Dict], start_idx: int, activity: Dict) -> Tuple[List[Dict], int, List[Dict]]:
+    def _gather_actions(self, actions: List[Dict], start_idx: int, activity: Dict) -> Tuple[List[Dict], int, List[Dict]]: # pylint: disable=line-too-long
         gathered, preserved = [], []
         found_required = set()
         time_window = activity["time_window"]
@@ -104,7 +104,7 @@ class ActivityMapper:
                 preserved.extend(actions[i:])
                 break
 
-            if action["action"] in rules["repeatable"] or action["action"] not in {a["action"] for a in gathered}:
+            if action["action"] in rules["repeatable"] or action["action"] not in {a["action"] for a in gathered}: # pylint: disable=line-too-long
                 gathered.append(action)
                 if action["action"] in rules["required"]:
                     found_required.add(action["action"])
@@ -125,7 +125,7 @@ class ActivityMapper:
         grouped = self._group_actions(actions)
         all_mapped_activities = []
 
-        for actions_group in tqdm(grouped.values(), desc="Mapping actions to activities", unit="group"):
+        for actions_group in tqdm(grouped.values(), desc="Mapping actions to activities", unit="group"): # pylint: disable=line-too-long
             i = 0
             while i < len(actions_group):
                 if actions_group[i]["event_id"] in self.used_ids:
