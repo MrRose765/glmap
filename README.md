@@ -6,7 +6,7 @@
 [![CodeQL](https://github.com/uhourri/ghmap/actions/workflows/codeql.yml/badge.svg?branch=main)](https://github.com/uhourri/ghmap/actions/workflows/codeql.yml)
 
 <!-- Dependencies & Security -->
-[![Dependencies](https://img.shields.io/badge/Dependencies-monitored-brightgreen)](https://github.com/uhourri/ghmap/security/dependabot)
+[![Dependencies](https://github.com/uhourri/ghmap/actions/workflows/dependabot/dependabot-updates/badge.svg?branch=main)](https://github.com/uhourri/ghmap/actions/workflows/dependabot/dependabot-updates)
 [![codecov](https://codecov.io/gh/uhourri/ghmap/branch/main/graph/badge.svg)](https://codecov.io/gh/uhourri/ghmap)
 
 <!-- Meta -->
