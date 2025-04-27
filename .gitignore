@@ -12,5 +12,3 @@ dist/
 
 # MacOS files
 *.DS_Store
-
-test/

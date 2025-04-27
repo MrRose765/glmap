@@ -18,7 +18,7 @@ class ActionMapper: # pylint: disable=too-few-public-methods
     def __init__(self, action_mapping: Dict):
         self.action_mapping = action_mapping
         self.event_type_key = action_mapping['parameters'].get('event_type', 'type')
-        self.tqdm_disable = action_mapping['parameters'].get('tqdm_disable', False)
+        self.progress_bar = action_mapping['parameters'].get('progress_bar', True)
 
     @staticmethod
     def _deserialize_payload(event_record: Dict) -> Dict:
@@ -136,8 +136,7 @@ class ActionMapper: # pylint: disable=too-few-public-methods
         """Maps events to high-level actions using mapping configuration."""
         all_mapped_actions = []
 
-        for event_record in tqdm(events, desc="Mapping events to actions", unit="event", disable=self.tqdm_disable): # pylint: disable=line-too-long
-            # If the dict contains a 'payload' field, deserialize it
+        for event_record in tqdm(events, desc="Mapping events to actions", unit="event", disable=not self.progress_bar): # pylint: disable=line-too-long
             if 'payload' in event_record:
                 event_record = self._deserialize_payload(event_record)
             event_record = self._convert_date_to_iso(event_record)
