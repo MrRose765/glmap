@@ -1,8 +1,11 @@
+"""Module to map GitHub actions to higher-level activities based on rules."""
+
 from datetime import datetime, timedelta
 from typing import List, Dict, Tuple, Any
 from tqdm import tqdm
 
-class ActivityMapper:
+
+class ActivityMapper: # pylint: disable=too-few-public-methods
     """
     A class to map GitHub actions to high-level activities based on predefined mapping rules.
 
@@ -18,26 +21,22 @@ class ActivityMapper:
 
     @staticmethod
     def _preprocess_activities(activity_mapping: Dict) -> Dict:
-        """
-        Preprocess the activity mapping by converting time windows to timedelta objects.
-        """
         for activity in activity_mapping["activities"]:
-            activity["time_window"] = timedelta(seconds=int(activity["time_window"].replace("s", "")))
+            activity["time_window"] = timedelta(
+                seconds=int(activity["time_window"].replace("s", ""))
+            )
         return activity_mapping
 
     @staticmethod
     def _within_time_limit(start_time: str, end_time: str, time_window: timedelta) -> bool:
-        """
-        Check if two timestamps are within a specified time window.
-        """
-        diff = abs(datetime.fromisoformat(end_time.replace("Z", "")) - datetime.fromisoformat(start_time.replace("Z", "")))
+        diff = abs(
+            datetime.fromisoformat(end_time.replace("Z", "")) -
+            datetime.fromisoformat(start_time.replace("Z", ""))
+        )
         return diff <= time_window
 
     @staticmethod
     def _get_nested_value(data: Dict, field: str) -> Any:
-        """
-        Retrieve a nested value from a dictionary using dot notation.
-        """
         for key in field.split('.'):
             data = data.get(key)
             if data is None:
@@ -46,9 +45,6 @@ class ActivityMapper:
 
     @staticmethod
     def _group_actions(actions: List[Dict]) -> Dict[Tuple[int, int], List[Dict]]:
-        """
-        Group actions by actor ID and repository ID, and sort by date within each group.
-        """
         grouped = {}
         for action in actions:
             key = (action["actor"]["id"], action["repository"]["id"])
@@ -57,16 +53,16 @@ class ActivityMapper:
             group.sort(key=lambda x: x["date"])
         return grouped
 
-    def _validate_gathered_actions(self, gathered: List[Dict], activity: Dict) -> Tuple[List[Dict], List[Dict]]:
-        """
-        Validate gathered actions against the rules defined in the activity mapping.
-        """
+    def _validate_gathered_actions(self, gathered: List[Dict], activity: Dict) -> Tuple[List[Dict], List[Dict]]: # pylint: disable=line-too-long
         if len(gathered) == 1:
             return gathered, []
 
         validated, invalid = [], []
         for action in gathered:
-            config = next((a for a in activity["actions"] if a["action"] == action["action"]), {})
+            config = next(
+                (a for a in activity["actions"] if a["action"] == action["action"]),
+                {}
+            )
             if not config.get("validate_with"):
                 validated.append(action)
                 continue
@@ -80,7 +76,7 @@ class ActivityMapper:
                         for field in rule["fields"]
                     )
                     for target in gathered
-                    if target["action"] == rule["target_action"] and target["event_id"] != action["event_id"]
+                    if target["action"] == rule["target_action"] and target["event_id"] != action["event_id"] # pylint: disable=line-too-long
                 )
                 for rule in config["validate_with"]
             )
@@ -89,12 +85,7 @@ class ActivityMapper:
 
         return validated, invalid
 
-    def _gather_actions(
-        self, actions: List[Dict], start_idx: int, activity: Dict
-    ) -> Tuple[List[Dict], int, List[Dict]]:
-        """
-        Gather valid actions for a specific activity starting from a given index.
-        """
+    def _gather_actions(self, actions: List[Dict], start_idx: int, activity: Dict) -> Tuple[List[Dict], int, List[Dict]]: # pylint: disable=line-too-long
         gathered, preserved = [], []
         found_required = set()
         time_window = activity["time_window"]
@@ -106,7 +97,7 @@ class ActivityMapper:
         }
 
         for i, action in enumerate(actions[start_idx:], start_idx):
-            if gathered and not self._within_time_limit(gathered[-1]["date"], action["date"], time_window):
+            if gathered and not self._within_time_limit(gathered[-1]["date"], action["date"], time_window): # pylint: disable=line-too-long
                 preserved.extend(actions[i:])
                 break
 
@@ -114,11 +105,11 @@ class ActivityMapper:
                 preserved.extend(actions[i:])
                 break
 
-            if action["action"] in rules["repeatable"] or action["action"] not in {a["action"] for a in gathered}:
+            if action["action"] in rules["repeatable"] or action["action"] not in {a["action"] for a in gathered}: # pylint: disable=line-too-long
                 gathered.append(action)
-                found_required.add(action["action"]) if action["action"] in rules["required"] else None
-
-            elif action["action"] not in rules["repeatable"]:
+                if action["action"] in rules["required"]:
+                    found_required.add(action["action"])
+            else:
                 preserved.extend(actions[i:])
                 break
 
@@ -131,14 +122,12 @@ class ActivityMapper:
         return validated, start_idx + len(validated), preserved
 
     def map(self, actions: List[Dict]) -> List[Dict]:
-        """
-        Map actions to activities based on the predefined activity mapping.
-        """
+        """Map actions to activities based on activity mapping configuration."""
         grouped = self._group_actions(actions)
         all_mapped_activities = []
 
         # Add progress bar for processing each grouped set of actions
-        for actions_group in tqdm(grouped.values(), desc="Mapping actions to activities", unit="group", disable=self.tqdm_disable):
+        for actions_group in tqdm(grouped.values(), desc="Mapping actions to activities", unit="group", disable=self.tqdm_disable): # pylint: disable=line-too-long
             i = 0
             while i < len(actions_group):
                 if actions_group[i]["event_id"] in self.used_ids:
@@ -146,7 +135,7 @@ class ActivityMapper:
                     continue
 
                 for activity in self.activity_mapping["activities"]:
-                    gathered, next_idx, preserved = self._gather_actions(actions_group, i, activity)
+                    gathered, _, _ = self._gather_actions(actions_group, i, activity)
                     if gathered:
                         all_mapped_activities.append({
                             "activity": activity["name"],
@@ -154,16 +143,24 @@ class ActivityMapper:
                             "end_date": gathered[-1]["date"],
                             "actor": gathered[0]["actor"],
                             "repository": gathered[0]["repository"],
-                            "actions": [{k: a[k] for k in ("action", "event_id", "date", "details")} for a in gathered]
+                            "actions": [
+                                {k: a[k] for k in ("action", "event_id", "date", "details")}
+                                for a in gathered
+                            ]
                         })
                         self.used_ids.update(a["event_id"] for a in gathered)
-                        actions_group = [a for a in actions_group if a["event_id"] not in self.used_ids]
+                        actions_group = [
+                            a for a in actions_group if a["event_id"] not in self.used_ids
+                        ]
                         i = 0
                         break
                 else:
                     i += 1
 
-        unused_ids = {a["event_id"] for group in grouped.values() for a in group} - self.used_ids
+        unused_ids = {
+            a["event_id"] for group in grouped.values() for a in group
+        } - self.used_ids
+
         if unused_ids:
             print(f"Warning: Unused actions: {unused_ids}")
 

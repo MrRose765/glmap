@@ -1,5 +1,20 @@
 # ghmap: GitHub Event Mapping Tool
 
+<!-- CI & QA -->
+[![Tests](https://github.com/uhourri/ghmap/actions/workflows/python-package.yml/badge.svg?branch=main)](https://github.com/uhourri/ghmap/actions/workflows/python-package.yml)
+[![Linting](https://github.com/uhourri/ghmap/actions/workflows/pylint.yml/badge.svg?branch=main)](https://github.com/uhourri/ghmap/actions/workflows/pylint.yml)
+[![CodeQL](https://github.com/uhourri/ghmap/actions/workflows/codeql.yml/badge.svg?branch=main)](https://github.com/uhourri/ghmap/actions/workflows/codeql.yml)
+
+<!-- Dependencies & Security -->
+[![Dependencies](https://github.com/uhourri/ghmap/actions/workflows/dependabot/dependabot-updates/badge.svg?branch=main)](https://github.com/uhourri/ghmap/actions/workflows/dependabot/dependabot-updates)
+[![codecov](https://codecov.io/gh/uhourri/ghmap/branch/main/graph/badge.svg)](https://codecov.io/gh/uhourri/ghmap)
+
+<!-- Meta -->
+[![PyPI](https://badgen.net/pypi/v/ghmap?cachebuster=1)](https://pypi.org/project/ghmap)
+[![Commits](https://badgen.net/github/last-commit/uhourri/ghmap)](https://github.com/uhourri/ghmap/commits/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![SWH](https://archive.softwareheritage.org/badge/origin/https://github.com/uhourri/ghmap/)](https://archive.softwareheritage.org/browse/origin/?origin_url=https://github.com/uhourri/ghmap)
+
 ghmap is a Python-based tool designed to process raw GitHub event data and convert it into higher-level, structured actions & activities that reflect contributors’ real intent. By transforming low-level events like PullRequestEvent, CreateEvent, and PushEvent into more meaningful actions and activities, ghmap makes it easier to analyze and understand contributor behavior in large GitHub repositories. Full mappings for events → actions and actions → activities can be found in [event_to_action.json](https://github.com/uhourri/ghmap/blob/main/ghmap/config/event_to_action.json) and [action_to_activity.json](https://github.com/uhourri/ghmap/blob/main/ghmap/config/action_to_activity.json)
 
 The dataset, **"A Dataset of Contributor Activities in the NumFocus Open-Source Community"**, was built using ghmap. It includes +2M activities from +180K contributors across 2.8K repositories and 58 projects over three years. Access it on [Zenodo](https://doi.org/10.5281/zenodo.14230406).
@@ -7,28 +22,36 @@ The dataset, **"A Dataset of Contributor Activities in the NumFocus Open-Source 
 
 ## Repository Structure
 
+<pre><code>
 ```
 .
-├── LICENSE                    # License file (MIT License)
-├── README.md                  # Project documentation (this file)
-├── ghmap                      # Main package directory containing all tool-related code
-│   ├── __init__.py            # Initialization file for the `ghmap` package
-│   ├── cli.py                 # Command-line interface to run the tool
-│   ├── config                 # Directory for mapping configuration files
-│   │   ├── action_to_activity.json  # Maps actions to activities
-│   │   └── event_to_action.json    # Maps events to actions
-│   ├── mapping                # Mapping logic for event and action handling
-│   │   ├── __init__.py        # Initialization file for the `mapping` module
-│   │   ├── action_mapper.py   # Maps GitHub events to high-level actions
-│   │   └── activity_mapper.py # Maps actions to structured activities
-│   ├── preprocess             # Preprocessing logic for raw GitHub events
-│   │   ├── __init__.py        # Initialization file for the `preprocess` module
-│   │   └── event_processor.py # Processes raw GitHub events (e.g., filtering unwanted events)
-│   └── utils.py               # Utility functions (e.g., file loading, saving data)
-├── pyproject.toml             # Project metadata and dependencies (build configuration)
-├── requirements.txt           # Dependencies required for the project
-└── setup.py                   # Backward-compatible setup script
+├── LICENSE                       # Project license (MIT)
+├── README.md                     # Project overview and documentation
+├── ghmap/                        # Main Python package for GH mapping tool
+│   ├── __init__.py               # Marks ghmap as a Python package
+│   ├── cli.py                    # Command-line interface entry point
+│   ├── config/                   # JSON configs for event/action mappings
+│   │   ├── action_to_activity.json   # Rules to map actions → activities
+│   │   └── event_to_action.json      # Rules to map events → actions
+│   ├── mapping/                 # Logic for mapping events and actions
+│   │   ├── __init__.py
+│   │   ├── action_mapper.py      # Maps raw events to high-level actions
+│   │   └── activity_mapper.py    # Groups actions into structured activities
+│   ├── preprocess/              # Event preprocessing logic
+│   │   ├── __init__.py
+│   │   └── event_processor.py    # Cleans and filters GitHub events
+│   └── utils.py                  # Utility functions (load/save helpers)
+├── pyproject.toml                # Build system, dependencies, and metadata
+├── requirements.txt              # List of Python dependencies
+├── setup.py                      # Legacy install script for compatibility
+└── tests/                        # Test suite for CLI and mapping logic
+    ├── test_cli.py               # CLI integration test using sample data
+    └── data/                     # Test fixtures and expected outputs
+        ├── sample-events.json         # Input sample GitHub events
+        ├── expected-actions.jsonl     # Expected mapped actions
+        └── expected-activities.jsonl  # Expected final activities
 ```
+</code></pre>
 
 
 ## Installation
@@ -62,7 +85,7 @@ source .venv/bin/activate
 
 Once the virtual environment is activated, you can install the project and its dependencies from the GitHub repository:
 ```bash
-pip install git+https://github.com/uhourri/ghmap.git
+pip install ghmap
 ```
 This will install the tool along with its dependencies, including tqdm for progress tracking during long computations.
 
@@ -486,6 +509,43 @@ A set of related actions is aggregated into a single activity. Each activity rec
 
 This step bridges the gap between granular operations and high-level task representations, enabling nuanced insights into contributor workflows.
 
+
+---
+
+## Citation
+
+If you use this tool or dataset in your research, please cite:
+
+### 📄 Paper
+
+> **A Dataset of Contributor Activities in the NumFocus Open-Source Community**  
+> Youness Hourri, Alexandre Decan, Tom Mens  
+> _22nd International Conference on Mining Software Repositories (MSR)_  
+> Ottawa (Ontario, Canada) on the 28th and 29th of April, 2025.
+
+```bibtex
+@inproceedings{hourri2025dataset,
+  title={A Dataset of Contributor Activities in the NumFocus Open-Source Community},
+  author={Hourri, Youness and Decan, Alexandre and Mens, Tom},
+  booktitle={22nd International Conference on Mining Software Repositories},
+  year={2025},
+  organization={IEEE}
+}
+```
+
+### 🛠️ Tool
+
+> **ghmap: GitHub Event Mapping Tool**  
+> Youness Hourri
+
+```bibtex
+@software{hourri2025ghmap,
+  author       = {Hourri, Youness},
+  title        = {ghmap: GitHub Event Mapping Tool},
+  url          = {https://github.com/uhourri/ghmap},
+  note         = {Accessed: 2025-03-21}
+}
+```
 
 ## Contributing
 
