@@ -7,7 +7,8 @@
       "license": "MIT"
     },
     "parameters": {
-      "event_type": "type",
+      "event_type_key": "type",
+      "created_at_key": "created_at",
       "progress_bar": true
     },
     "common_fields": {

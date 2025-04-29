@@ -17,7 +17,8 @@ class ActionMapper: # pylint: disable=too-few-public-methods
 
     def __init__(self, action_mapping: Dict):
         self.action_mapping = action_mapping
-        self.event_type_key = action_mapping['parameters'].get('event_type', 'type')
+        self.event_type_key = action_mapping['parameters'].get('event_type_key', 'type')
+        self.created_at_key = action_mapping['parameters'].get('created_at_key', 'created_at')
         self.progress_bar = action_mapping['parameters'].get('progress_bar', True)
 
     @staticmethod
@@ -27,19 +28,18 @@ class ActionMapper: # pylint: disable=too-few-public-methods
             event_record['payload'] = json.loads(event_record['payload'])
         return event_record
 
-    @staticmethod
-    def _convert_date_to_iso(event_record: Dict) -> Dict:
+    def _convert_date_to_iso(self, event_record: Dict) -> Dict:
         """Converts 'created_at' to ISO 8601 format if it's a Unix timestamp or string."""
-        created_at = event_record.get('created_at')
+        created_at = event_record.get(self.created_at_key)
         if isinstance(created_at, str):
             # If the date has milliseconds, remove them
             if '.' in created_at:
                 created_at = created_at.split('.')[0] + "Z"
-            event_record['created_at'] = datetime.strptime(
+            event_record[self.created_at_key] = datetime.strptime(
                 created_at, '%Y-%m-%dT%H:%M:%SZ'
             ).strftime('%Y-%m-%dT%H:%M:%SZ')
         elif isinstance(created_at, int):
-            event_record['created_at'] = datetime.utcfromtimestamp(
+            event_record[self.created_at_key] = datetime.utcfromtimestamp(
                 created_at / 1000
             ).strftime('%Y-%m-%dT%H:%M:%SZ')
         return event_record
