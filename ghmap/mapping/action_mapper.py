@@ -13,13 +13,16 @@ class ActionMapper: # pylint: disable=too-few-public-methods
 
     Attributes:
         action_mapping (Dict): Predefined mapping of actions and event rules.
+        event_type_key (str): Key to identify the event type in the event record.
+        created_at_key (str): Key to identify the creation date in the event record.
+        progress_bar (bool): Flag to enable or disable progress bar (tqdm).
     """
 
-    def __init__(self, action_mapping: Dict):
+    def __init__(self, action_mapping: Dict, progress_bar: bool = True):
         self.action_mapping = action_mapping
         self.event_type_key = action_mapping['parameters'].get('event_type_key', 'type')
         self.created_at_key = action_mapping['parameters'].get('created_at_key', 'created_at')
-        self.progress_bar = action_mapping['parameters'].get('progress_bar', True)
+        self.progress_bar = progress_bar
 
     @staticmethod
     def _deserialize_payload(event_record: Dict) -> Dict:

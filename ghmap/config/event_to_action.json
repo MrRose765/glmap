@@ -8,8 +8,7 @@
     },
     "parameters": {
       "event_type_key": "type",
-      "created_at_key": "created_at",
-      "progress_bar": true
+      "created_at_key": "created_at"
     },
     "common_fields": {
       "event_id": "id",
