@@ -20,8 +20,9 @@ class ActionMapper: # pylint: disable=too-few-public-methods
 
     def __init__(self, action_mapping: Dict, progress_bar: bool = True):
         self.action_mapping = action_mapping
-        self.event_type_key = action_mapping['parameters'].get('event_type_key', 'type')
-        self.created_at_key = action_mapping['parameters'].get('created_at_key', 'created_at')
+        parameters = action_mapping.get('parameters', {})
+        self.event_type_key = parameters.get('event_type_key', 'type')
+        self.created_at_key = parameters.get('created_at_key', 'created_at')
         self.progress_bar = progress_bar
 
     @staticmethod
