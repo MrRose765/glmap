@@ -12,11 +12,13 @@ class ActivityMapper: # pylint: disable=too-few-public-methods
     Attributes:
         activity_mapping (Dict): Predefined mapping of activities and rules.
         used_ids (set): Set of action IDs that have been processed.
+        progress_bar (bool): Flag to enable or disable progress bar (tqdm).
     """
 
-    def __init__(self, activity_mapping: Dict):
+    def __init__(self, activity_mapping: Dict, progress_bar: bool = True):
         self.activity_mapping = self._preprocess_activities(activity_mapping)
         self.used_ids = set()
+        self.progress_bar = progress_bar
 
     @staticmethod
     def _preprocess_activities(activity_mapping: Dict) -> Dict:
@@ -125,7 +127,7 @@ class ActivityMapper: # pylint: disable=too-few-public-methods
         grouped = self._group_actions(actions)
         all_mapped_activities = []
 
-        for actions_group in tqdm(grouped.values(), desc="Mapping actions to activities", unit="group"): # pylint: disable=line-too-long
+        for actions_group in tqdm(grouped.values(), desc="Mapping actions to activities", unit="group", disable=not self.progress_bar): # pylint: disable=line-too-long
             i = 0
             while i < len(actions_group):
                 if actions_group[i]["event_id"] in self.used_ids:

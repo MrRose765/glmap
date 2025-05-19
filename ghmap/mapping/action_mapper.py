@@ -13,10 +13,17 @@ class ActionMapper: # pylint: disable=too-few-public-methods
 
     Attributes:
         action_mapping (Dict): Predefined mapping of actions and event rules.
+        event_type_key (str): Key to identify the event type in the event record.
+        created_at_key (str): Key to identify the creation date in the event record.
+        progress_bar (bool): Flag to enable or disable progress bar (tqdm).
     """
 
-    def __init__(self, action_mapping: Dict):
+    def __init__(self, action_mapping: Dict, progress_bar: bool = True):
         self.action_mapping = action_mapping
+        parameters = action_mapping.get('parameters', {})
+        self.event_type_key = parameters.get('event_type_key', 'type')
+        self.created_at_key = parameters.get('created_at_key', 'created_at')
+        self.progress_bar = progress_bar
 
     @staticmethod
     def _deserialize_payload(event_record: Dict) -> Dict:
@@ -25,16 +32,18 @@ class ActionMapper: # pylint: disable=too-few-public-methods
             event_record['payload'] = json.loads(event_record['payload'])
         return event_record
 
-    @staticmethod
-    def _convert_date_to_iso(event_record: Dict) -> Dict:
+    def _convert_date_to_iso(self, event_record: Dict) -> Dict:
         """Converts 'created_at' to ISO 8601 format if it's a Unix timestamp or string."""
-        created_at = event_record.get('created_at')
+        created_at = event_record.get(self.created_at_key)
         if isinstance(created_at, str):
-            event_record['created_at'] = datetime.strptime(
+            # If the date has milliseconds, remove them
+            if '.' in created_at:
+                created_at = created_at.split('.')[0] + "Z"
+            event_record[self.created_at_key] = datetime.strptime(
                 created_at, '%Y-%m-%dT%H:%M:%SZ'
             ).strftime('%Y-%m-%dT%H:%M:%SZ')
         elif isinstance(created_at, int):
-            event_record['created_at'] = datetime.utcfromtimestamp(
+            event_record[self.created_at_key] = datetime.utcfromtimestamp(
                 created_at / 1000
             ).strftime('%Y-%m-%dT%H:%M:%SZ')
         return event_record
@@ -131,14 +140,15 @@ class ActionMapper: # pylint: disable=too-few-public-methods
         """Maps events to high-level actions using mapping configuration."""
         all_mapped_actions = []
 
-        for event_record in tqdm(events, desc="Mapping events to actions", unit="event"):
-            event_record = self._deserialize_payload(event_record)
+        for event_record in tqdm(events, desc="Mapping events to actions", unit="event", disable=not self.progress_bar): # pylint: disable=line-too-long
+            if 'payload' in event_record:
+                event_record = self._deserialize_payload(event_record)
             event_record = self._convert_date_to_iso(event_record)
-            event_type = event_record.get('type')
+            event_type = self._extract_field(event_record, self.event_type_key)
 
             for action_name, action_details in self.action_mapping['actions'].items():
                 if (
-                    event_type == action_details['event']['type']
+                    event_type == action_details['event'].get('type', None)
                     and all(
                         self._match_condition(
                             self._extract_field(event_record, k), v
