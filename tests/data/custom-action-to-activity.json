@@ -179,7 +179,7 @@
         ]
       },
       {
-        "name": "CloseIssue",
+        "name": "CustomCloseIssue",
         "time_window": "3s",
         "actions": [
           {
@@ -188,7 +188,7 @@
             "repeat": false
           },
           {
-            "action": "CreateIssueComment",
+            "action": "CustomCreateIssueComment",
             "optional": true,
             "repeat": false,
             "validate_with": [
@@ -206,7 +206,7 @@
         ]
       },
       {
-        "name": "ReopenIssue",
+        "name": "CustomReopenIssue",
         "time_window": "3s",
         "actions": [
           {
@@ -215,7 +215,7 @@
             "repeat": false
           },
           {
-            "action": "CreateIssueComment",
+            "action": "CustomCreateIssueComment",
             "optional": true,
             "repeat": false,
             "validate_with": [
@@ -298,11 +298,11 @@
         ]
       },
       {
-        "name": "CommentIssue",
+        "name": "CustomCommentIssue",
         "time_window": "300s",
         "actions": [
           {
-            "action": "CreateIssueComment",
+            "action": "CustomCreateIssueComment",
             "optional": false,
             "repeat": true,
             "validate_with": [

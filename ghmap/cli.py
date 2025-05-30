@@ -46,6 +46,22 @@ def main():
         default=[],
         help="List of organizations to remove from the raw events."
     )
+    parser.add_argument(
+        '--disable-progress-bar',
+        action='store_false',
+        dest='progress_bar',
+        help="Disable the progress bar display."
+    )
+    parser.add_argument(
+        '--custom-action-mapping',
+        default=None,
+        help='Path to a custom event to action mapping JSON file.'
+    )
+    parser.add_argument(
+        '--custom-activity-mapping',
+        default=None,
+        help='Path to a custom action to activity mapping JSON file.'
+    )
     args = parser.parse_args()
 
     try:
@@ -60,17 +76,23 @@ def main():
         )
 
         # Step 1: Event to Action Mapping
-        event_to_action_file = files("ghmap").joinpath("config", "event_to_action.json")
+        if args.custom_action_mapping:
+            event_to_action_file = args.custom_action_mapping
+        else:
+            event_to_action_file = files("ghmap").joinpath("config", "event_to_action.json")
         action_mapping = load_json_file(event_to_action_file)
-        action_mapper = ActionMapper(action_mapping)
+        action_mapper = ActionMapper(action_mapping, progress_bar=args.progress_bar)
         actions = action_mapper.map(events)
         save_to_jsonl_file(actions, args.output_actions)
         print(f"Step 1 completed. Actions saved to: {args.output_actions}")
 
         # Step 2: Action to Activity Mapping
-        action_to_activity_file = files("ghmap").joinpath("config", "action_to_activity.json")
+        if args.custom_activity_mapping:
+            action_to_activity_file = args.custom_activity_mapping
+        else:
+            action_to_activity_file = files("ghmap").joinpath("config", "action_to_activity.json")
         activity_mapping = load_json_file(action_to_activity_file)
-        activity_mapper = ActivityMapper(activity_mapping)
+        activity_mapper = ActivityMapper(activity_mapping, progress_bar=args.progress_bar)
         activities = activity_mapper.map(actions)
         save_to_jsonl_file(activities, args.output_activities)
         print(f"Step 2 completed. Activities saved to: {args.output_activities}")
