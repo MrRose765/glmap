@@ -518,18 +518,17 @@ If you use this tool or dataset in your research, please cite:
 
 ### 📄 Paper
 
-> **A Dataset of Contributor Activities in the NumFocus Open-Source Community**  
-> Youness Hourri, Alexandre Decan, Tom Mens  
-> _22nd International Conference on Mining Software Repositories (MSR)_  
-> Ottawa (Ontario, Canada) on the 28th and 29th of April, 2025.
+> Y. Hourri, A. Decan and T. Mens, **"A Dataset of Contributor Activities in the NumFocus Open-Source Community,"** 2025 IEEE/ACM 22nd International Conference on Mining Software Repositories (MSR), Ottawa, ON, Canada, 2025, pp. 159-163, doi: 10.1109/MSR66628.2025.00035
 
 ```bibtex
 @inproceedings{hourri2025dataset,
-  title={A Dataset of Contributor Activities in the NumFocus Open-Source Community},
   author={Hourri, Youness and Decan, Alexandre and Mens, Tom},
-  booktitle={22nd International Conference on Mining Software Repositories},
+  booktitle={2025 IEEE/ACM 22nd International Conference on Mining Software Repositories (MSR)}, 
+  title={A Dataset of Contributor Activities in the NumFocus Open-Source Community}, 
   year={2025},
-  organization={IEEE}
+  pages={159-163},
+  keywords={Collaboration;Data science;Data mining;Open source software;Software development management;open source;software community;collaborative development;contributor activities;repository mining},
+  doi={10.1109/MSR66628.2025.00035}
 }
 ```
 
