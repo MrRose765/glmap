@@ -4,7 +4,8 @@
       "description": "Mapping of GitHub event types to action types.",
       "author": "Youness Hourri",
       "created": "2024-10-07",
-      "license": "MIT"
+      "license": "MIT",
+      "platform": "GitHub"
     },
     "parameters": {
       "event_type_key": "type",

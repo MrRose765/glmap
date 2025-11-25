@@ -11,7 +11,9 @@ class EventProcessor: # pylint: disable=too-few-public-methods
     A class to process events, removing unwanted events and filtering redundant review events.
     """
 
-    def __init__(self):
+    def __init__(self, platform: str = 'GitHub', progress_bar: bool = True):
+        self.platform = platform
+        self.progress_bar = progress_bar
         self.processed_ids = set()
         self.pending_events = []
 
@@ -111,7 +113,7 @@ class EventProcessor: # pylint: disable=too-few-public-methods
         all_processed_events = []
 
         if os.path.isdir(input_folder):
-            for filename in tqdm(sorted(os.listdir(input_folder)), desc="Processing event files"):
+            for filename in tqdm(sorted(os.listdir(input_folder)), desc="Processing event files", disable=not self.progress_bar):
                 if filename.endswith('.json'):
                     file_path = os.path.join(input_folder, filename)
                     with open(file_path, 'r', encoding='utf-8') as f:
@@ -120,7 +122,8 @@ class EventProcessor: # pylint: disable=too-few-public-methods
                     events = self._remove_unwanted_actors(events, actors_to_remove)
                     events = self._remove_unwanted_repos(events, repos_to_remove)
                     events = self._remove_unwanted_orgs(events, orgs_to_remove)
-                    events = self._filter_redundant_review_events(events)
+                    if self.platform == 'GitHub':
+                        events = self._filter_redundant_review_events(events)
 
                     all_processed_events.extend(events)
 
@@ -132,7 +135,8 @@ class EventProcessor: # pylint: disable=too-few-public-methods
                 events = self._remove_unwanted_actors(events, actors_to_remove)
                 events = self._remove_unwanted_repos(events, repos_to_remove)
                 events = self._remove_unwanted_orgs(events, orgs_to_remove)
-                events = self._filter_redundant_review_events(events)
+                if self.platform == 'GitHub':
+                    events = self._filter_redundant_review_events(events)
 
                 all_processed_events.extend(events)
 

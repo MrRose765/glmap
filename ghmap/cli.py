@@ -65,9 +65,18 @@ def main():
     args = parser.parse_args()
 
     try:
+        # Load Event to Action Mapping to get metadata information
+        if args.custom_action_mapping:
+            event_to_action_file = args.custom_action_mapping
+        else:
+            event_to_action_file = files("ghmap").joinpath("config", "event_to_action.json")
+        action_mapping = load_json_file(event_to_action_file)
+
+        platform = action_mapping.get('metadata', {}).get('platform', 'GitHub')
+
         # Step 0: Event Preprocessing
         print("Step 0: Preprocessing events...")
-        processor = EventProcessor()
+        processor = EventProcessor(platform, progress_bar=args.progress_bar)
         events = processor.process(
             args.raw_events,
             args.actors_to_remove,
@@ -76,11 +85,6 @@ def main():
         )
 
         # Step 1: Event to Action Mapping
-        if args.custom_action_mapping:
-            event_to_action_file = args.custom_action_mapping
-        else:
-            event_to_action_file = files("ghmap").joinpath("config", "event_to_action.json")
-        action_mapping = load_json_file(event_to_action_file)
         action_mapper = ActionMapper(action_mapping, progress_bar=args.progress_bar)
         actions = action_mapper.map(events)
         save_to_jsonl_file(actions, args.output_actions)
