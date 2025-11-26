@@ -94,7 +94,8 @@ def main():
         if args.custom_activity_mapping:
             action_to_activity_file = args.custom_activity_mapping
         else:
-            action_to_activity_file = files("ghmap").joinpath("config", "gl_action_to_activity.json")
+            action_to_activity_file = (files("ghmap")
+                                       .joinpath("config", "gl_action_to_activity.json"))
         activity_mapping = load_json_file(action_to_activity_file)
         activity_mapper = ActivityMapper(activity_mapping, progress_bar=args.progress_bar)
         activities = activity_mapper.map(actions)
