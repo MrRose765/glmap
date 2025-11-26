@@ -11,7 +11,7 @@ from .utils import load_json_file, save_to_jsonl_file
 def main():
     """Parse arguments and run the event-to-activity mapping pipeline."""
     parser = argparse.ArgumentParser(
-        description="Process GitHub events into structured activities."
+        description="Process GitLab events into structured activities based on ghmap tool."
     )
     parser.add_argument(
         '--raw-events',
@@ -69,7 +69,7 @@ def main():
         if args.custom_action_mapping:
             event_to_action_file = args.custom_action_mapping
         else:
-            event_to_action_file = files("ghmap").joinpath("config", "event_to_action.json")
+            event_to_action_file = files("ghmap").joinpath("config", "gl_event_to_action.json")
         action_mapping = load_json_file(event_to_action_file)
 
         platform = action_mapping.get('metadata', {}).get('platform', 'GitHub')
@@ -94,7 +94,7 @@ def main():
         if args.custom_activity_mapping:
             action_to_activity_file = args.custom_activity_mapping
         else:
-            action_to_activity_file = files("ghmap").joinpath("config", "action_to_activity.json")
+            action_to_activity_file = files("ghmap").joinpath("config", "gl_action_to_activity.json")
         activity_mapping = load_json_file(action_to_activity_file)
         activity_mapper = ActivityMapper(activity_mapping, progress_bar=args.progress_bar)
         activities = activity_mapper.map(actions)

@@ -3,13 +3,13 @@ requires = ["setuptools >= 62.6", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "ghmap"
+name = "glmap"
 version = "1.0.6"
 license = { text = "MIT License" }
-authors = [{ name = "Youness Hourri", email = "youness.hourri@umons.ac.be" }]
-description = "GitHub event mapping tool"
+authors = [{ name = "Cyril Moreau", email = "cyril.moreau@umons.ac.be" }]
+description = "GitLab event mapping tool"
 readme = { file = "README.md", content-type = "text/markdown" }
-urls = { Homepage = "https://github.com/uhourri/ghmap" }
+urls = { Homepage = "https://github.com/MrRose765/glmap" }
 requires-python = ">= 3.10"
 classifiers = [
     'Programming Language :: Python :: 3',
@@ -29,13 +29,13 @@ dynamic = ["dependencies"]
 dependencies = {file = ["requirements.txt"]}
 
 [project.scripts]
-ghmap = "ghmap.cli:main"
+glmap = "ghmap.cli:main"
 
 [tool.setuptools]
 packages = ["ghmap", "ghmap.preprocess", "ghmap.mapping"]
 
 [tool.setuptools.package-data]
-ghmap = ["config/event_to_action.json", "config/action_to_activity.json"]
+ghmap = ["config/gl_event_to_action.json", "config/gl_action_to_activity.json"]
 
 [tool.coverage.run]
 branch = true
