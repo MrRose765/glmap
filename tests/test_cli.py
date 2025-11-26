@@ -37,7 +37,7 @@ def test_ghmap_cli_customized_mapping():
     with tempfile.TemporaryDirectory() as tmpdir:
         subprocess.run([
             "python", "-m", "ghmap.cli",
-            "--raw-events", os.path.join(sample_dir, "sample-events.json"),
+            "--raw-events", os.path.join(sample_dir, "custom-sample-events.json"),
             "--output-actions", os.path.join(tmpdir, "actions.jsonl"),
             "--output-activities", os.path.join(tmpdir, "activities.jsonl"),
             "--custom-action-mapping", os.path.join(sample_dir, "custom-event-to-action.json"),

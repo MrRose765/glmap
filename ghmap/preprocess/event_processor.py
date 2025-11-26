@@ -6,12 +6,14 @@ from typing import List, Dict
 from tqdm import tqdm
 
 
-class EventProcessor: # pylint: disable=too-few-public-methods
+class EventProcessor:  # pylint: disable=too-few-public-methods
     """
     A class to process events, removing unwanted events and filtering redundant review events.
     """
 
-    def __init__(self):
+    def __init__(self, platform: str = 'GitHub', progress_bar: bool = True):
+        self.platform = platform
+        self.progress_bar = progress_bar
         self.processed_ids = set()
         self.pending_events = []
 
@@ -45,16 +47,16 @@ class EventProcessor: # pylint: disable=too-few-public-methods
             if not self._is_within_time_window(current_event, events[j]):
                 break
             if events[j]['type'] == "PullRequestReviewCommentEvent" and \
-               events[j]['actor']['id'] == actor_id and \
-               events[j]['repo']['id'] == repo_id:
+                    events[j]['actor']['id'] == actor_id and \
+                    events[j]['repo']['id'] == repo_id:
                 return False
 
         for j in range(index + 1, len(events)):
             if not self._is_within_time_window(current_event, events[j]):
                 break
             if events[j]['type'] == "PullRequestReviewCommentEvent" and \
-               events[j]['actor']['id'] == actor_id and \
-               events[j]['repo']['id'] == repo_id:
+                    events[j]['actor']['id'] == actor_id and \
+                    events[j]['repo']['id'] == repo_id:
                 return False
 
         return True
@@ -69,11 +71,11 @@ class EventProcessor: # pylint: disable=too-few-public-methods
             if event['type'] == "PullRequestReviewEvent" and event['id'] not in self.processed_ids:
                 if self._should_keep_event(event, combined_events, i):
                     if not (
-                        filtered_events and
-                        filtered_events[-1]['type'] == "PullRequestReviewEvent" and
-                        filtered_events[-1]['actor']['id'] == event['actor']['id'] and
-                        filtered_events[-1]['repo']['id'] == event['repo']['id'] and
-                        self._is_within_time_window(filtered_events[-1], event)
+                            filtered_events and
+                            filtered_events[-1]['type'] == "PullRequestReviewEvent" and
+                            filtered_events[-1]['actor']['id'] == event['actor']['id'] and
+                            filtered_events[-1]['repo']['id'] == event['repo']['id'] and
+                            self._is_within_time_window(filtered_events[-1], event)
                     ):
                         filtered_events.append(event)
                         self.processed_ids.add(event['id'])
@@ -99,11 +101,11 @@ class EventProcessor: # pylint: disable=too-few-public-methods
         return [e for e in events if e.get('org', {}).get('login') not in orgs_to_remove]
 
     def process(
-        self,
-        input_folder: str,
-        actors_to_remove: List[str],
-        repos_to_remove: List[str],
-        orgs_to_remove: List[str]
+            self,
+            input_folder: str,
+            actors_to_remove: List[str],
+            repos_to_remove: List[str],
+            orgs_to_remove: List[str]
     ) -> List[Dict]:
         """
         Processes the input folder or file, applies filters, and returns the cleaned events.
@@ -111,7 +113,8 @@ class EventProcessor: # pylint: disable=too-few-public-methods
         all_processed_events = []
 
         if os.path.isdir(input_folder):
-            for filename in tqdm(sorted(os.listdir(input_folder)), desc="Processing event files"):
+            for filename in tqdm(sorted(os.listdir(input_folder)), desc="Processing event files",
+                                 disable=not self.progress_bar):
                 if filename.endswith('.json'):
                     file_path = os.path.join(input_folder, filename)
                     with open(file_path, 'r', encoding='utf-8') as f:
@@ -120,7 +123,8 @@ class EventProcessor: # pylint: disable=too-few-public-methods
                     events = self._remove_unwanted_actors(events, actors_to_remove)
                     events = self._remove_unwanted_repos(events, repos_to_remove)
                     events = self._remove_unwanted_orgs(events, orgs_to_remove)
-                    events = self._filter_redundant_review_events(events)
+                    if self.platform == 'GitHub':
+                        events = self._filter_redundant_review_events(events)
 
                     all_processed_events.extend(events)
 
@@ -132,7 +136,8 @@ class EventProcessor: # pylint: disable=too-few-public-methods
                 events = self._remove_unwanted_actors(events, actors_to_remove)
                 events = self._remove_unwanted_repos(events, repos_to_remove)
                 events = self._remove_unwanted_orgs(events, orgs_to_remove)
-                events = self._filter_redundant_review_events(events)
+                if self.platform == 'GitHub':
+                    events = self._filter_redundant_review_events(events)
 
                 all_processed_events.extend(events)
 

@@ -1,629 +1,732 @@
 {
-    "metadata": {
-      "version": "1.1",
-      "description": "Mapping of GitHub event types to action types.",
-      "author": "Youness Hourri",
-      "created": "2024-10-07",
-      "license": "MIT"
+  "metadata": {
+    "version": "1.0",
+    "description": "Mapping of GitLab event types to action types.",
+    "author": "Cyril Moreau",
+    "created": "2025-03-25",
+    "license": "MIT",
+    "platform": "GitLab"
+  },
+  "parameters": {
+    "event_type_key": "target_type",
+    "create_at_key": "created_at"
+  },
+  "common_fields": {
+    "event_id": "id",
+    "date": "created_at",
+    "actor": {
+      "id": "author.id",
+      "login": "author.username"
     },
-    "parameters": {
-      "event_type_key": "type",
-      "created_at_key": "created_at"
-    },
-    "common_fields": {
-      "event_id": "id",
-      "date": "created_at",
-      "actor": {
-        "id": "actor.id",
-        "login": "actor.login"
+    "repository": {
+      "id": "project_id"
+    }
+  },
+  "actions": {
+    "CreateIssue": {
+      "event": {
+        "type": "Issue",
+        "action_name": "opened"
       },
-      "repository": {
-        "id": "repo.id",
-        "name": "repo.name",
-        "organisation": "org.login",
-        "organisation_id": "org.id"
+      "attributes": {
+        "include_common_fields": true,
+        "details": {
+          "issue": {
+            "id": "target_id",
+            "iid": "target_iid",
+            "title": "target_title"
+          }
+        }
       }
     },
-    "actions": {
-      "CommentCommit": {
-        "event": {
-          "type": "CommitCommentEvent"
-        },
-        "attributes": {
-          "include_common_fields": true,
-          "details": {
-            "commit_comment": {
-              "id": "payload.comment.id",
-              "commit": "payload.comment.commit_id",
-              "file_line": "payload.comment.line",
-              "file_path": "payload.comment.path"
-            }
+    "CloseIssue": {
+      "event": {
+        "type": "Issue",
+        "action_name": "closed"
+      },
+      "attributes": {
+        "include_common_fields": true,
+        "details": {
+          "issue": {
+            "id": "target_id",
+            "iid": "target_iid",
+            "title": "target_title"
           }
+        }
+      }
+    },
+    "CreateIssueComment": {
+      "event": {
+        "type": "Note",
+        "action_name": "commented on",
+        "note": {
+          "noteable_type": "Issue"
         }
       },
-      "CreateBranch": {
-        "event": {
-          "type": "CreateEvent",
-          "payload": {
-            "ref_type": "branch"
+      "attributes": {
+        "include_common_fields": true,
+        "details": {
+          "issue": {
+            "id": "note.noteable_id",
+            "iid": "note.noteable_iid",
+            "title": "target_title"
+          },
+          "comment": {
+            "id": "target_id",
+            "body": "note.body"
           }
-        },
-        "attributes": {
-          "include_common_fields": true,
-          "details": {
-            "branch": {
-              "name": "payload.ref",
-              "description": "payload.description"
-            }
-          }
+        }
+      }
+    },
+    "CreateIssueThread": {
+      "event": {
+        "type": "DiscussionNote",
+        "action_name": "commented on",
+        "note": {
+          "noteable_type": "Issue"
         }
       },
-      "CreateRepository": {
-        "event": {
-          "type": "CreateEvent",
-          "payload": {
-            "ref_type": "repository"
+      "attributes": {
+        "include_common_fields": true,
+        "details": {
+          "issue": {
+            "id": "note.noteable_id",
+            "iid": "note.noteable_iid",
+            "title": "target_title"
+          },
+          "comment": {
+            "id": "target_id",
+            "body": "note.body"
           }
-        },
-        "attributes": {
-          "include_common_fields": true,
-          "details": {
-            "repository": {
-              "main_branch": "payload.master_branch",
-              "description": "payload.description"
-            }
+        }
+      }
+    },
+    "MergePullRequest": {
+      "event": {
+        "type": "MergeRequest",
+        "action_name": "accepted"
+      },
+      "attributes": {
+        "include_common_fields": true,
+        "details": {
+          "pull_request": {
+            "id": "target_id",
+            "iid": "target_iid",
+            "title": "target_title"
           }
+        }
+      }
+    },
+    "ApprovePullRequest": {
+      "event": {
+        "type": "MergeRequest",
+        "action_name": "approved"
+      },
+      "attributes": {
+        "include_common_fields": true,
+        "details": {
+          "pull_request": {
+            "id": "target_id",
+            "iid": "target_iid",
+            "title": "target_title"
+          }
+        }
+      }
+    },
+    "CreatePullRequest": {
+      "event": {
+        "type": "MergeRequest",
+        "action_name": "opened"
+      },
+      "attributes": {
+        "include_common_fields": true,
+        "details": {
+          "pull_request": {
+            "id": "target_id",
+            "iid": "target_iid",
+            "title": "target_title"
+          }
+        }
+      }
+    },
+    "ClosePullRequest": {
+      "event": {
+        "type": "MergeRequest",
+        "action_name": "closed"
+      },
+      "attributes": {
+        "include_common_fields": true,
+        "details": {
+          "pull_request": {
+            "id": "target_id",
+            "iid": "target_iid",
+            "title": "target_title"
+          }
+        }
+      }
+    },
+    "CreatePullRequestComment": {
+      "event": {
+        "type": "Note",
+        "action_name": "commented on",
+        "note": {
+          "noteable_type": "MergeRequest"
         }
       },
-      "CreateTag": {
-        "event": {
-          "type": "CreateEvent",
-          "payload": {
-            "ref_type": "tag"
+      "attributes": {
+        "include_common_fields": true,
+        "details": {
+          "pull_request": {
+            "id": "note.noteable_id",
+            "iid": "note.noteable_iid",
+            "title": "target_title"
+          },
+          "comment": {
+            "id": "note.id",
+            "body": "note.body"
           }
-        },
-        "attributes": {
-          "include_common_fields": true,
-          "details": {
-            "tag_name": "payload.ref"
-          }
+        }
+      }
+    },
+    "CreatePullRequestThread": {
+      "event": {
+        "type": "DiscussionNote",
+        "action_name": "commented on",
+        "note": {
+          "noteable_type": "MergeRequest"
         }
       },
-      "DeleteBranch": {
-        "event": {
-          "type": "DeleteEvent",
-          "payload": {
-            "ref_type": "branch"
+      "attributes": {
+        "include_common_fields": true,
+        "details": {
+          "pull_request": {
+            "id": "note.noteable_id",
+            "iid": "note.noteable_iid",
+            "title": "target_title"
+          },
+          "comment": {
+            "id": "note.id",
+            "body": "note.body"
           }
-        },
-        "attributes": {
-          "include_common_fields": true,
-          "details": {
-            "branch_name": "payload.ref"
-          }
+        }
+      }
+    },
+    "CreatePullRequestReviewComment": {
+      "event": {
+        "type": "DiffNote",
+        "action_name": "commented on",
+        "note": {
+          "noteable_type": "MergeRequest"
         }
       },
-      "DeleteTag": {
-        "event": {
-          "type": "DeleteEvent",
-          "payload": {
-            "ref_type": "tag"
+      "attributes": {
+        "include_common_fields": true,
+        "details": {
+          "pull_request": {
+            "id": "note.noteable_id",
+            "iid": "note.noteable_iid",
+            "title": "target_title"
+          },
+          "review": {
+            "file": "note.position.new_path",
+            "line_range": "note.position.line_range"
+          },
+          "comment": {
+            "id": "note.id",
+            "body": "note.body"
           }
-        },
-        "attributes": {
-          "include_common_fields": true,
-          "details": {
-            "tag_name": "payload.ref"
-          }
+        }
+      }
+    },
+    "JoinRepository": {
+      "event": {
+        "action_name": "joined"
+      },
+      "attributes": {
+        "include_common_fields": true
+      }
+    },
+    "ExpireRepositoryMembership": {
+      "event": {
+        "action_name": "removed due to membership expiration from"
+      },
+      "attributes": {
+        "include_common_fields": true
+      }
+    },
+    "LeftRepository": {
+      "event": {
+        "action_name": "left"
+      },
+      "attributes": {
+        "include_common_fields": true
+      }
+    },
+    "CreateTag": {
+      "event": {
+        "action_name": "pushed new",
+        "push_data": {
+          "action": "created",
+          "ref_type": "tag"
         }
       },
-      "ForkRepository": {
-        "event": {
-          "type": "ForkEvent"
-        },
-        "attributes": {
-          "include_common_fields": true,
-          "details": {
-            "fork": {
-              "id": "payload.forkee.id",
-              "name": "payload.forkee.full_name",
-              "description": "payload.forkee.description",
-              "main_branch": "payload.forkee.default_branch"
-            }
+      "attributes": {
+        "include_common_fields": true,
+        "details": {
+          "tag": {
+            "name": "push_data.ref",
+            "count": "push_data.ref_count"
           }
+        }
+      }
+    },
+    "DeleteTag": {
+      "event": {
+        "action_name": "deleted",
+        "push_data": {
+          "ref_type": "tag"
         }
       },
-      "ManageWikiPage": {
-        "event": {
-          "type": "GollumEvent"
-        },
-        "attributes": {
-          "include_common_fields": true,
-          "details": {
-            "pages": [
-              {
-                "name": "payload.pages.page_name",
-                "action": "payload.pages.action",
-                "commit": "payload.pages.sha"
-              }
-            ]
+      "attributes": {
+        "include_common_fields": true,
+        "details": {
+          "tag": {
+            "name": "push_data.ref",
+            "count": "push_data.ref_count"
           }
+        }
+      }
+    },
+    "CreateBranch": {
+      "event": {
+        "action_name": "pushed new",
+        "push_data": {
+          "ref_type": "branch",
+          "action": "created"
         }
       },
-      "CustomCreateIssueComment": {
-        "event": {
-          "type": "IssueCommentEvent",
-          "payload": {
-            "action": "created",
-            "issue": {
-              "html_url": "^https://github\\.com/.+/issues/\\d+$"
-            }
+      "attributes": {
+        "include_common_fields": true,
+        "details": {
+          "branch": {
+            "name": "push_data.ref",
+            "count": "push_data.ref_count"
+          },
+          "commit": {
+            "id": "push_data.commit_to",
+            "title": "push_data.commit_title",
+            "count": "push_data.commit_count"
           }
-        },
-        "attributes": {
-          "include_common_fields": true,
-          "details": {
-            "issue": {
-              "id": "payload.issue.id",
-              "number": "payload.issue.number",
-              "title": "payload.issue.title",
-              "state": "payload.issue.state",
-              "author": {
-                "id": "payload.issue.user.id",
-                "login": "payload.issue.user.login"
-              },
-              "labels": [
-                {
-                  "name": "payload.issue.labels.name",
-                  "description": "payload.issue.labels.description"
-                }
-              ],
-              "created_date": "payload.issue.created_at",
-              "updated_date": "payload.issue.updated_at",
-              "closed_date": "payload.issue.closed_at"
-            },
-            "comment": {
-              "id": "payload.comment.id",
-              "position": "payload.issue.comments"
-            }
-          }
+        }
+      }
+    },
+    "DeleteBranch": {
+      "event": {
+        "action_name": "deleted",
+        "push_data": {
+          "ref_type": "branch"
         }
       },
-      "CreatePullRequestComment": {
-        "event": {
-          "type": "IssueCommentEvent",
-          "payload": {
-            "action": "created",
-            "issue": {
-              "html_url": "^https://github\\.com/.+/pull/\\d+$"
-            }
+      "attributes": {
+        "include_common_fields": true,
+        "details": {
+          "branch": {
+            "name": "push_data.ref",
+            "count": "push_data.ref_count"
+          },
+          "commit": {
+            "id": "push_data.commit_to",
+            "title": "push_data.commit_title",
+            "count": "push_data.commit_count"
           }
-        },
-        "attributes": {
-          "include_common_fields": true,
-          "details": {
-            "pull_request": {
-              "id": "payload.issue.id",
-              "number": "payload.issue.number",
-              "title": "payload.issue.title",
-              "state": "payload.issue.state",
-              "author": {
-                "id": "payload.issue.user.id",
-                "login": "payload.issue.user.login"
-              },
-              "labels": [
-                {
-                  "name": "payload.issue.labels.name",
-                  "description": "payload.issue.labels.description"
-                }
-              ],
-              "created_date": "payload.issue.created_at",
-              "updated_date": "payload.issue.updated_at",
-              "closed_date": "payload.issue.closed_at",
-              "merged_date": "payload.issue.pull_request.merged_at"
-            },
-            "comment": {
-              "id": "payload.comment.id",
-              "position": "payload.issue.comments"
-            }
+        }
+      }
+    },
+    "CreateWikiPage": {
+      "event": {
+        "type": "WikiPage::Meta",
+        "action_name": "created"
+      },
+      "attributes": {
+        "include_common_fields": true,
+        "details": {
+          "wiki_page": {
+            "title": "target_title",
+            "slug": "wiki_page.slug",
+            "format": "wiki_page.format",
+            "id": "target_id",
+            "iid": "target_iid"
           }
+        }
+      }
+    },
+    "DestroyWikiPage": {
+      "event": {
+        "type": "WikiPage::Meta",
+        "action_name": "destroyed"
+      },
+      "attributes": {
+        "include_common_fields": true,
+        "details": {
+          "wiki_page": {
+            "title": "target_title",
+            "slug": "wiki_page.slug",
+            "format": "wiki_page.format",
+            "id": "target_id",
+            "iid": "target_iid"
+          }
+        }
+      }
+    },
+    "UpdateWikiPage": {
+      "event": {
+        "type": "WikiPage::Meta",
+        "action_name": "updated"
+      },
+      "attributes": {
+        "include_common_fields": true,
+        "details": {
+          "wiki_page": {
+            "title": "target_title",
+            "slug": "wiki_page.slug",
+            "format": "wiki_page.format",
+            "id": "target_id",
+            "iid": "target_iid"
+          }
+        }
+      }
+    },
+    "CreateWikiPageComment": {
+      "event": {
+        "type": "Note",
+        "action_name": "commented on",
+        "note": {
+          "noteable_type": "WikiPage::Meta"
         }
       },
-      "CloseIssue": {
-        "event": {
-          "type": "IssuesEvent",
-          "payload": {
-            "action": "closed"
+      "attributes": {
+        "include_common_fields": true,
+        "details": {
+          "wiki_page": {
+            "title": "target_title",
+            "slug": "wiki_page.slug",
+            "format": "wiki_page.format",
+            "id": "target_id",
+            "iid": "target_iid"
+          },
+          "comment": {
+            "id": "note.id",
+            "body": "note.body"
           }
-        },
-        "attributes": {
-          "include_common_fields": true,
-          "details": {
-            "issue": {
-              "id": "payload.issue.id",
-              "number": "payload.issue.number",
-              "title": "payload.issue.title",
-              "state": "payload.issue.state",
-              "author": {
-                "id": "payload.issue.user.id",
-                "login": "payload.issue.user.login"
-              },
-              "labels": [
-                {
-                  "name": "payload.issue.labels.name",
-                  "description": "payload.issue.labels.description"
-                }
-              ],
-              "created_date": "payload.issue.created_at",
-              "updated_date": "payload.issue.updated_at",
-              "closed_date": "payload.issue.closed_at"
-            }
-          }
+        }
+      }
+    },
+    "PushCommits": {
+      "event": {
+        "action_name": "pushed to",
+        "push_data": {
+          "action": "pushed"
         }
       },
-      "OpenIssue": {
-        "event": {
-          "type": "IssuesEvent",
-          "payload": {
-            "action": "opened"
+      "attributes": {
+        "include_common_fields": true,
+        "details": {
+          "commit": {
+            "id": "push_data.commit_to",
+            "title": "push_data.commit_title",
+            "count": "push_data.commit_count"
+          },
+          "branch": {
+            "name": "push_data.ref"
           }
-        },
-        "attributes": {
-          "include_common_fields": true,
-          "details": {
-            "issue": {
-              "id": "payload.issue.id",
-              "number": "payload.issue.number",
-              "title": "payload.issue.title",
-              "state": "payload.issue.state",
-              "author": {
-                "id": "payload.issue.user.id",
-                "login": "payload.issue.user.login"
-              },
-              "labels": [
-                {
-                  "name": "payload.issue.labels.name",
-                  "description": "payload.issue.labels.description"
-                }
-              ],
-              "created_date": "payload.issue.created_at",
-              "updated_date": "payload.issue.updated_at",
-              "closed_date": "payload.issue.closed_at"
-            }
-          }
+        }
+      }
+    },
+    "CreateCommitComment": {
+      "event": {
+        "type": "Note",
+        "action_name": "commented on",
+        "note": {
+          "noteable_type": "Commit"
         }
       },
-      "ReopenIssue": {
-        "event": {
-          "type": "IssuesEvent",
-          "payload": {
-            "action": "reopened"
+      "attributes": {
+        "include_common_fields": true,
+        "details": {
+          "commit": {
+            "title": "target_title"
+          },
+          "commit_comment": {
+            "id": "note.id",
+            "body": "note.body"
           }
-        },
-        "attributes": {
-          "include_common_fields": true,
-          "details": {
-            "issue": {
-              "id": "payload.issue.id",
-              "number": "payload.issue.number",
-              "title": "payload.issue.title",
-              "state": "payload.issue.state",
-              "author": {
-                "id": "payload.issue.user.id",
-                "login": "payload.issue.user.login"
-              },
-              "labels": [
-                {
-                  "name": "payload.issue.labels.name",
-                  "description": "payload.issue.labels.description"
-                }
-              ],
-              "created_date": "payload.issue.created_at",
-              "updated_date": "payload.issue.updated_at",
-              "closed_date": "payload.issue.closed_at"
-            }
-          }
+        }
+      }
+    },
+    "CreateCommitThread": {
+      "event": {
+        "type": "DiscussionNote",
+        "action_name": "commented on",
+        "note": {
+          "noteable_type": "Commit"
         }
       },
-      "AddMember": {
-        "event": {
-          "type": "MemberEvent",
-          "payload": {
-            "action": "added"
+      "attributes": {
+        "include_common_fields": true,
+        "details": {
+          "commit": {
+            "title": "target_title"
+          },
+          "commit_comment": {
+            "id": "note.id",
+            "body": "note.body"
           }
-        },
-        "attributes": {
-          "include_common_fields": true,
-          "details": {
-            "member": {
-              "id": "payload.member.id",
-              "login": "payload.member.login"
-            }
-          }
+        }
+      }
+    },
+    "CreateCommitReviewComment": {
+      "event": {
+        "type": "DiffNote",
+        "action_name": "commented on",
+        "note": {
+          "noteable_type": "Commit"
         }
       },
-      "MakeRepositoryPublic": {
-        "event": {
-          "type": "PublicEvent"
-        },
-        "attributes": {
-          "include_common_fields": true
+      "attributes": {
+        "include_common_fields": true,
+        "details": {
+          "commit": {
+            "title": "target_title"
+          },
+          "review": {
+            "file": "note.position.new_path",
+            "line": "note.position.new_line"
+          },
+          "commit_review_comment": {
+            "id": "note.id",
+            "body": "note.body"
+          }
+        }
+      }
+    },
+    "AddDesign": {
+      "event": {
+        "type": "DesignManagement::Design",
+        "action_name": "added"
+      },
+      "attributes": {
+        "include_common_fields": true,
+        "details": {
+          "design": {
+            "id": "target_id",
+            "iid": "target_iid",
+            "filename": "target_title"
+          }
+        }
+      }
+    },
+    "RemoveDesign": {
+      "event": {
+        "type": "DesignManagement::Design",
+        "action_name": "removed"
+      },
+      "attributes": {
+        "include_common_fields": true,
+        "details": {
+          "design": {
+            "id": "target_id",
+            "iid": "target_iid",
+            "filename": "target_title"
+          }
+        }
+      }
+    },
+    "CreateDesignComment": {
+      "event": {
+        "type": "DiffNote",
+        "action_name": "commented on",
+        "note": {
+          "noteable_type": "DesignManagement::Design"
         }
       },
-      "MergePullRequest": {
-        "event": {
-          "type": "PullRequestEvent",
-          "payload": {
-            "action": "closed",
-            "pull_request": {
-              "merged": true
-            }
+      "attributes": {
+        "include_common_fields": true,
+        "details": {
+          "design": {
+            "id": "note.noteable_id",
+            "iid": "note.noteable_iid",
+            "filename": "target_title"
+          },
+          "comment": {
+            "id": "note.id",
+            "body": "note.body"
           }
-        },
-        "attributes": {
-          "include_common_fields": true,
-          "details": {
-            "pull_request": {
-              "id": "payload.pull_request.id",
-              "number": "payload.pull_request.number",
-              "title": "payload.pull_request.title",
-              "state": "payload.pull_request.state",
-              "author": {
-                "id": "payload.pull_request.user.id",
-                "login": "payload.pull_request.user.login"
-              },
-              "labels": [
-                {
-                  "name": "payload.pull_request.labels.name",
-                  "description": "payload.pull_request.labels.description"
-                }
-              ],
-              "created_date": "payload.pull_request.created_at",
-              "updated_date": "payload.pull_request.updated_at",
-              "closed_date": "payload.pull_request.closed_at",
-              "merged": "payload.pull_request.merged"
-            }
+        }
+      }
+    },
+    "UpdateDesign": {
+      "event": {
+        "type": "DesignManagement::Design",
+        "action_name": "updated"
+      },
+      "attributes": {
+        "include_common_fields": true,
+        "details": {
+          "design": {
+            "id": "target_id",
+            "iid": "target_iid",
+            "filename": "target_title"
           }
+        }
+      }
+    },
+    "CreateMilestone": {
+      "event": {
+        "type": "Milestone",
+        "action_name": "opened"
+      },
+      "attributes": {
+        "include_common_fields": true,
+        "details": {
+          "milestone": {
+            "id": "target_id",
+            "iid": "target_iid",
+            "title": "target_title"
+          }
+        }
+      }
+    },
+    "CloseMilestone": {
+      "event": {
+        "type": "Milestone",
+        "action_name": "closed"
+      },
+      "attributes": {
+        "include_common_fields": true,
+        "details": {
+          "milestone": {
+            "id": "target_id",
+            "iid": "target_iid",
+            "title": "target_title"
+          }
+        }
+      }
+    },
+    "DestroyMilestone": {
+      "event": {
+        "type": "Milestone",
+        "action_name": "destroyed"
+      },
+      "attributes": {
+        "include_common_fields": true,
+        "details": {
+          "milestone": {
+            "id": "target_id",
+            "iid": "target_iid",
+            "title": "target_title"
+          }
+        }
+      }
+    },
+    "CreateSnippetComment": {
+      "event": {
+        "type": "Note",
+        "action_name": "commented on",
+        "note": {
+          "noteable_type": "Snippet"
         }
       },
-      "ClosePullRequest": {
-        "event": {
-          "type": "PullRequestEvent",
-          "payload": {
-            "action": "closed",
-            "pull_request": {
-              "merged": false
-            }
+      "attributes": {
+        "include_common_fields": true,
+        "details": {
+          "snippet": {
+            "id": "note.noteable_id",
+            "title": "target_title"
+          },
+          "comment": {
+            "id": "target_id",
+            "body": "note.body"
           }
-        },
-        "attributes": {
-          "include_common_fields": true,
-          "details": {
-            "pull_request": {
-              "id": "payload.pull_request.id",
-              "number": "payload.pull_request.number",
-              "title": "payload.pull_request.title",
-              "state": "payload.pull_request.state",
-              "author": {
-                "id": "payload.pull_request.user.id",
-                "login": "payload.pull_request.user.login"
-              },
-              "labels": [
-                {
-                  "name": "payload.pull_request.labels.name",
-                  "description": "payload.pull_request.labels.description"
-                }
-              ],
-              "created_date": "payload.pull_request.created_at",
-              "updated_date": "payload.pull_request.updated_at",
-              "closed_date": "payload.pull_request.closed_at",
-              "merged": "payload.pull_request.merged"
-            }
-          }
+        }
+      }
+    },
+    "CreateSnippetThread": {
+      "event": {
+        "type": "DiscussionNote",
+        "action_name": "commented on",
+        "note": {
+          "noteable_type": "Snippet"
         }
       },
-      "OpenPullRequest": {
-        "event": {
-          "type": "PullRequestEvent",
-          "payload": {
-            "action": "opened"
-          }
-        },
-        "attributes": {
-          "include_common_fields": true,
-          "details": {
-            "pull_request": {
-              "id": "payload.pull_request.id",
-              "number": "payload.pull_request.number",
-              "title": "payload.pull_request.title",
-              "state": "payload.pull_request.state",
-              "author": {
-                "id": "payload.pull_request.user.id",
-                "login": "payload.pull_request.user.login"
-              },
-              "labels": [
-                {
-                  "name": "payload.pull_request.labels.name",
-                  "description": "payload.pull_request.labels.description"
-                }
-              ],
-              "created_date": "payload.pull_request.created_at",
-              "updated_date": "payload.pull_request.updated_at",
-              "closed_date": "payload.pull_request.closed_at",
-              "merged": "payload.pull_request.merged"
-            }
+      "attributes": {
+        "include_common_fields": true,
+        "details": {
+          "snippet": {
+            "id": "note.noteable_id",
+            "title": "target_title"
+          },
+          "comment": {
+            "id": "target_id",
+            "body": "note.body"
           }
         }
+      }
+    },
+    "CreateWorkItem": {
+      "event": {
+        "type": "WorkItem",
+        "action_name": "opened"
       },
-      "ReopenPullRequest": {
-        "event": {
-          "type": "PullRequestEvent",
-          "payload": {
-            "action": "reopened"
-          }
-        },
-        "attributes": {
-          "include_common_fields": true,
-          "details": {
-            "pull_request": {
-              "id": "payload.pull_request.id",
-              "number": "payload.pull_request.number",
-              "title": "payload.pull_request.title",
-              "state": "payload.pull_request.state",
-              "author": {
-                "id": "payload.pull_request.user.id",
-                "login": "payload.pull_request.user.login"
-              },
-              "labels": [
-                {
-                  "name": "payload.pull_request.labels.name",
-                  "description": "payload.pull_request.labels.description"
-                }
-              ],
-              "created_date": "payload.pull_request.created_at",
-              "updated_date": "payload.pull_request.updated_at",
-              "closed_date": "payload.pull_request.closed_at",
-              "merged": "payload.pull_request.merged"
-            }
+      "attributes": {
+        "include_common_fields": true,
+        "details": {
+          "work_item": {
+            "id": "target_id",
+            "iid": "target_iid",
+            "title": "target_title"
           }
         }
+      }
+    },
+    "CloseWorkItem": {
+      "event": {
+        "type": "WorkItem",
+        "action_name": "closed"
       },
-      "CreatePullRequestReviewComment": {
-        "event": {
-          "type": "PullRequestReviewCommentEvent",
-          "payload": {
-            "action": "created"
-          }
-        },
-        "attributes": {
-          "include_common_fields": true,
-          "details": {
-            "pull_request": {
-              "id": "payload.pull_request.id",
-              "number": "payload.pull_request.number",
-              "title": "payload.pull_request.title",
-              "state": "payload.pull_request.state",
-              "author": {
-                "id": "payload.pull_request.user.id",
-                "login": "payload.pull_request.user.login"
-              },
-              "labels": [
-                {
-                  "name": "payload.pull_request.labels.name",
-                  "description": "payload.pull_request.labels.description"
-                }
-              ],
-              "created_date": "payload.pull_request.created_at",
-              "updated_date": "payload.pull_request.updated_at",
-              "closed_date": "payload.pull_request.closed_at",
-              "merged_date": "payload.pull_request.pull_request.merged_at"
-            },
-            "review": {
-              "id": "payload.comment.pull_request_review_id",
-              "updated_date": "payload.comment.updated_at"
-            },
-            "comment": {
-              "id": "payload.comment.id",
-              "parent_comment_id": "payload.comment.in_reply_to_id"
-            }
+      "attributes": {
+        "include_common_fields": true,
+        "details": {
+          "work_item": {
+            "id": "target_id",
+            "iid": "target_iid",
+            "title": "target_title"
           }
         }
+      }
+    },
+    "CreateRepository": {
+      "event": {
+        "action_name": "created"
       },
-      "CreatePullRequestReview": {
-        "event": {
-          "type": "PullRequestReviewEvent",
-          "payload": {
-            "action": "created"
-          }
-        },
-        "attributes": {
-          "include_common_fields": true,
-          "details": {
-            "pull_request": {
-              "id": "payload.pull_request.id",
-              "number": "payload.pull_request.number",
-              "title": "payload.pull_request.title",
-              "state": "payload.pull_request.state",
-              "author": {
-                "id": "payload.pull_request.user.id",
-                "login": "payload.pull_request.user.login"
-              },
-              "labels": [
-                {
-                  "name": "payload.pull_request.labels.name",
-                  "description": "payload.pull_request.labels.description"
-                }
-              ],
-              "created_date": "payload.pull_request.created_at",
-              "updated_date": "payload.pull_request.updated_at",
-              "closed_date": "payload.pull_request.closed_at",
-              "merged_date": "payload.pull_request.pull_request.merged_at"
-            },
-            "review": {
-              "id": "payload.review.id",
-              "submitted_date": "payload.review.submitted_at"
-            }
-          }
-        }
+      "attributes": {
+        "include_common_fields": true
+      }
+    },
+    "ImportRepository": {
+      "event": {
+        "action_name": "imported"
       },
-      "PushCommits": {
-        "event": {
-          "type": "PushEvent"
-        },
-        "attributes": {
-          "include_common_fields": true,
-          "details": {
-            "push": {
-              "id": "payload.push_id",
-              "ref": "payload.ref",
-              "commits": "payload.size"
-            }
-          }
-        }
+      "attributes": {
+        "include_common_fields": true
+      }
+    },
+    "UnknownAction": {
+      "event": {
+        "type": "*"
       },
-      "PublishRelease": {
-        "event": {
-          "type": "ReleaseEvent",
-          "payload": {
-            "action": "published"
-          }
-        },
-        "attributes": {
-          "include_common_fields": true,
-          "details": {
-            "release": {
-              "id": "payload.release.id",
-              "name": "payload.release.name",
-              "tag": "payload.release.tag_name",
-              "author": {
-                "id": "payload.release.author.id",
-                "login": "payload.release.author.login"
-              },
-              "draft": "payload.release.draft",
-              "prerelease": "payload.release.prerelease",
-              "created_date": "payload.release.created_at"
-            }
-          }
-        }
-      },
-      "StarRepository": {
-        "event": {
-          "type": "WatchEvent",
-          "payload": {
-            "action": "started"
-          }
-        },
-        "attributes": {
-          "include_common_fields": true
-        }
-      },
-      "UnknownAction": {
-        "event": {
-          "type": "*"
-        },
-        "attributes": {
-          "include_common_fields": true
-        }
+      "attributes": {
+        "include_common_fields": true
       }
     }
   }
+}
