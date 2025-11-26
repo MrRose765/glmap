@@ -36,3 +36,11 @@ packages = ["ghmap", "ghmap.preprocess", "ghmap.mapping"]
 
 [tool.setuptools.package-data]
 ghmap = ["config/event_to_action.json", "config/action_to_activity.json"]
+
+[tool.coverage.run]
+branch = true
+source = ["ghmap"]
+omit = [
+    "*/__init__.py",
+]
+patch = ["subprocess"]

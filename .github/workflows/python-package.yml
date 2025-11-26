@@ -41,7 +41,7 @@ jobs:
 
     - name: Run tests with coverage
       run: |
-        pytest --cov=ghmap --cov-branch --cov-report=xml
+        pytest --cov --cov-report=xml
 
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v5
