@@ -1,10 +1,10 @@
 {
   "metadata": {
-    "version": "1.0",
-    "api_version": "17.10.0-pre",
+    "version": "1.1",
+    "api_version": "18.7.0-pre",
     "description": "Mapping of GitLab event types to action types.",
     "author": "Cyril Moreau",
-    "created": "2025-03-25",
+    "created": "2025-11-27",
     "license": "MIT",
     "platform": "GitLab"
   },
@@ -241,6 +241,7 @@
     },
     "JoinRepository": {
       "event": {
+        "type": "Project",
         "action_name": "joined"
       },
       "attributes": {
@@ -249,6 +250,7 @@
     },
     "ExpireRepositoryMembership": {
       "event": {
+        "type": "Project",
         "action_name": "removed due to membership expiration from"
       },
       "attributes": {
@@ -257,6 +259,7 @@
     },
     "LeftRepository": {
       "event": {
+        "type": "Project",
         "action_name": "left"
       },
       "attributes": {
@@ -265,6 +268,7 @@
     },
     "CreateTag": {
       "event": {
+        "type": "Project",
         "action_name": "pushed new",
         "push_data": {
           "action": "created",
@@ -283,6 +287,7 @@
     },
     "DeleteTag": {
       "event": {
+        "type": "Project",
         "action_name": "deleted",
         "push_data": {
           "ref_type": "tag"
@@ -300,6 +305,7 @@
     },
     "CreateBranch": {
       "event": {
+        "type": "Project",
         "action_name": "pushed new",
         "push_data": {
           "ref_type": "branch",
@@ -323,6 +329,7 @@
     },
     "DeleteBranch": {
       "event": {
+        "type": "Project",
         "action_name": "deleted",
         "push_data": {
           "ref_type": "branch"
@@ -424,6 +431,7 @@
     },
     "PushCommits": {
       "event": {
+        "type": "Project",
         "action_name": "pushed to",
         "push_data": {
           "action": "pushed"
@@ -707,6 +715,7 @@
     },
     "CreateRepository": {
       "event": {
+        "type": "Project",
         "action_name": "created"
       },
       "attributes": {
@@ -715,6 +724,7 @@
     },
     "ImportRepository": {
       "event": {
+        "type": "Project",
         "action_name": "imported"
       },
       "attributes": {
